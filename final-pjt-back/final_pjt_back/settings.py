@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # 우리가 쓰는 앱들
     'accounts',
+    'movies',
 
     'rest_framework',
 
