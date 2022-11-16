@@ -4,7 +4,7 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.202.105:8000'
+const API_URL = 'http://127.0.0.1:8000'
 
 export default new Vuex.Store({
   state: {
@@ -13,6 +13,11 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
+    GET_MOVIES(state, movies) {
+      console.log(movies)
+      state.movies = movies
+
+    }
   },
   actions: {
     getMovies(context) {
@@ -21,8 +26,9 @@ export default new Vuex.Store({
         url: `${API_URL}/api/v1/movies/`,
       })
         .then((res) => {
-          console.log(res, context)
-          // context.commit('GET_MOVIES', res)
+          console.log(res.data)
+          context.commit('GET_MOVIES', res.data)
+
         })
         .catch((err) => {
           console.log(err)

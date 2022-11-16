@@ -14,10 +14,14 @@ export default {
   components: {
     MovieList,
   },
+  
   methods: {
     getMovies() {
       this.$store.dispatch('getMovies')
     }
+  },
+  created() {
+    this.getMovies()
   }
 
 }
