@@ -44,7 +44,7 @@ def dbInitialize():
                 movie.genre.add(Genre.objects.get(id=j))
         print(idx)
             
-    return redirect('http://127.0.0.1:8000/movie/api/v1/')
+    return 
 
 if not Genre.objects.all().count():
     dbInitialize()

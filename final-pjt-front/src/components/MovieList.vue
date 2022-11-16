@@ -2,7 +2,11 @@
   <div>
     <h2>Movie List</h2>
     <hr>
-    <MovieListItem/>
+    <MovieListItem
+      v-for='movie in movies'
+      :key='movie.id'
+      :movie='movie'
+    />
   </div>
 </template>
 
@@ -13,6 +17,11 @@ export default {
   name : 'MovieList',
   components : {
     MovieListItem,
+  },
+  computed: {
+    movies() {
+      return this.$store.state.movies
+    }
   }
 
 
