@@ -78,10 +78,16 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+<<<<<<< HEAD
     
     "corsheaders.middleware.CorsMiddleware",
+=======
+
+    
+>>>>>>> 8eb6c5fb3630357a369aaee5ecb4086fef11bcd5
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,10 +97,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+<<<<<<< HEAD
 # CORS_ALLOWED_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
 ]
+=======
+CORS_ORIGIN_ALLOW_ALL = True
+>>>>>>> 8eb6c5fb3630357a369aaee5ecb4086fef11bcd5
 
 ROOT_URLCONF = 'final_pjt_back.urls'
 
