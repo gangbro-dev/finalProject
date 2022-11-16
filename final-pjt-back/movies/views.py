@@ -53,5 +53,4 @@ if not Genre.objects.all().count():
 def getMovieList(request):
     movies = Movie.objects.all()
     serializer = MovieSerializer(movies, many=True)
-    pprint(serializer.data[0]['genre'])
     return Response(serializer.data)

@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cs!6q)!y9d9(e!j!tw91ay*rt+j$ptt1sgi9y$!!k5^ifqq!n5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -95,6 +95,8 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
 ]
+
+ALLOWED_HOSTS = ['*']
 
 ROOT_URLCONF = 'final_pjt_back.urls'
 
