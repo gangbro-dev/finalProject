@@ -4,7 +4,7 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.202.105:8000'
+const API_URL = 'http://127.0.0.1:8000'
 
 export default new Vuex.Store({
   state: {
@@ -25,7 +25,8 @@ export default new Vuex.Store({
           // context.commit('GET_MOVIES', res)
         })
         .catch((err) => {
-          console.log(err)
+
+          console.log(4, err)
         })
     }
   },

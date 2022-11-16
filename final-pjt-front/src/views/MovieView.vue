@@ -18,6 +18,9 @@ export default {
     getMovies() {
       this.$store.dispatch('getMovies')
     }
+  },
+  created () {
+    this.getMovies()
   }
 
 }
