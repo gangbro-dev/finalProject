@@ -2,10 +2,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 import requests
-from pprint import pprint
+
 from .models import Movie, Genre
+from .serializers import MovieSerializer
+
 import datetime
+from pprint import pprint
 API_KEY = '550af897681babc49f34957fa75cbee8'
 # Create your views here.
 def dbInitialize():
@@ -45,3 +49,9 @@ def dbInitialize():
 
 if not Genre.objects.all().count():
     dbInitialize()
+
+@api_view(["GET",])
+def getMovieList(request):
+    movies = Movie.objects.all()
+    serializer = MovieSerializer(movies, many=True)
+    return JsonResponse(serializer.data, safe=False)
