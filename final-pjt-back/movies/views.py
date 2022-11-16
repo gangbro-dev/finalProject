@@ -2,7 +2,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
 import requests
 
 from .models import Movie, Genre
@@ -54,4 +53,5 @@ if not Genre.objects.all().count():
 def getMovieList(request):
     movies = Movie.objects.all()
     serializer = MovieSerializer(movies, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    pprint(serializer.data[0]['genre'])
+    return Response(serializer.data)
