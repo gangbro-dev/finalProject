@@ -6,7 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://127.0.0.1:8000'
+const API_URL = 'http://192.168.202.105:8000'
 
 export default new Vuex.Store({
   plugins: [
@@ -17,6 +17,9 @@ export default new Vuex.Store({
     token: null,
   },
   getters: {
+    isLogin(state) {
+      return state.token ? true : false
+    }
   },
   mutations: {
     GET_MOVIES(state, movies) {
@@ -25,12 +28,17 @@ export default new Vuex.Store({
     SAVE_TOKEN(state, token) {
       state.token = token
       router.push({ name: 'MovieView' })
+    },
+    LOGOUT(state) {
+      state.token = null
+      localStorage.removeItem('user')
+      location.reload();
     }
   },
   actions: {
     getMovies(context) {
       axios({
-        method: 'get',
+        method: 'get',  
         url: `${API_URL}/api/v1/movies/`,
       })
         .then((res) => {
@@ -70,8 +78,11 @@ export default new Vuex.Store({
         .then((res) => {
           context.commit('SAVE_TOKEN', res.data.key)
         })
-    }
-  },
+    },
+    logout(context) {
+      context.commit('LOGOUT')
+    },
+    },
   modules: {
   }
 })

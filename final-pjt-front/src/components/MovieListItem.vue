@@ -1,7 +1,10 @@
 <template>
   <div class='container'>
-    <p>{{ movie.title }}</p>
-    <img :src="movie_poster" alt="">
+    <router-link :to="{ name :'DetailView', params:{id: movie.id}  }  ">
+      <p>{{ movie.title }}</p>
+      <img :src="movie_poster" alt="">
+    </router-link>
+    
   </div>
 </template>
 
