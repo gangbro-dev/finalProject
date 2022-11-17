@@ -12,16 +12,18 @@ import datetime
 from pprint import pprint
 API_KEY = '550af897681babc49f34957fa75cbee8'
 # Create your views here.
+
 def dbInitialize():
     for gen in requests.get(f'https://api.themoviedb.org/3/genre/movie/list?api_key={API_KEY}&language=ko-KR').json()['genres']:
         genre = Genre()
         genre.id = gen['id']
         genre.name = gen['name']
         genre.save()
+    print('get genre finished')
     for idx in range(1, 51):
         url = f'https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}&language=ko-KR&page={idx}&region=kr'
-        response = requests.get(url).json()
-        for res in response['results']:
+        response = requests.get(url).json()['results']
+        for res in response:
             # trailer_url = f'https://api.themoviedb.org/3/movie/{res["id"]}/videos?api_key={API_KEY}&language=ko-KR'
             # for video in requests.get(trailer_url).json()['results']:
             #     if video['type'] == 'Trailer':
@@ -44,11 +46,14 @@ def dbInitialize():
             for j in res['genre_ids']:
                 movie.genre.add(Genre.objects.get(id=j))
         print(idx)
+    print('get movie finished')
             
     return redirect('http://127.0.0.1:8000/movie/api/v1/')
 
-if not Genre.objects.all().count():
-    dbInitialize()
+# if not Movie.objects.all().count():
+#     print('start API')
+#     dbInitialize()
+#     print('end API')
 
 @api_view(["GET",])
 def getMovieList(request):
