@@ -3,9 +3,10 @@ from pprint import pprint
 
 import requests
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from rest_framework import status
-from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 
@@ -14,6 +15,7 @@ from .serializers import CommentSerializer, MovieSerializer
 
 API_KEY = '550af897681babc49f34957fa75cbee8'
 # Create your views here.
+
 
 def dbInitialize():
     PAGE_NUM = 50
@@ -49,6 +51,7 @@ def dbInitialize():
             
     return 
 
+
 try:
     if not Movie.objects.all().count():
         print('start API')
@@ -58,41 +61,62 @@ except:
     print('migrate first')
 
 
-
 @api_view(["GET",])
 def getMovieList(request):
     movies = Movie.objects.all()
     serializer = MovieSerializer(movies, many=True)
     return Response(serializer.data)
 
-@api_view(['GET',])
+
+@api_view(['GET','DELETE'])
 def getMovieDetail(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
-    trailer_url = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}/videos?api_key={API_KEY}&language=ko-KR'
-    for video in requests.get(trailer_url).json()['results']:
-        if video['type'] == 'Trailer':
-            movie.trailer = video['key']
-            break
-    serializer = MovieSerializer(movie)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        trailer_url = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}/videos?api_key={API_KEY}&language=ko-KR'
+        for video in requests.get(trailer_url).json()['results']:
+            if video['type'] == 'Trailer':
+                movie.trailer = video['key']
+                break
+        serializer = MovieSerializer(movie)
+        return Response(serializer.data)
+    return Response(status=status.HTTP_200_OK)
 
-@api_view(['GET', 'POST'])
-def getComments(request, movie_id):
+
+@api_view(['GET', 'POST', 'DELETE'])
+def comments(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
     if request.method == "GET":
         comments = Comment.objects.all().filter(movie=movie)
         serializer = CommentSerializer(comments, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-    if request.method == "POST":
-        print(1)
+    elif request.method == "POST":
         comment = Comment()
         comment.movie = movie
         comment.user = request.user
         comment.content = request.data['comment']
         comment.save()
-    return redirect(f'../{movie_id}')
+    elif request.method == 'DELETE':
+        comment = Comment.objects.get(pk=request.data['commentId'])
+        print(comment)
+        comment.delete()
+    return redirect(f'../../{movie_id}')
 
-@api_view(['POST'])
+
+@api_view(['GET', 'POST'])
+@login_required
 def clickLikeButton(request, movie_id):
-    pass
+    if request.method == 'GET':
+        movie = Movie.objects.get(pk=movie_id)
+        if request.user in movie.like_users.all():
+            return Response({'like': True}, status=status.HTTP_200_OK)
+        else:
+            return Response({'like': False}, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        movie = Movie.objects.get(pk=movie_id)
+        if request.user in movie.like_users.all():
+            movie.like_users.remove(request.user)
+            return Response({'like': False}, status=status.HTTP_200_OK)
+        else:
+            movie.like_users.add(request.user)
+            return Response({'like': True}, status=status.HTTP_200_OK)
