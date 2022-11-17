@@ -1,14 +1,16 @@
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, renderer_classes
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-from django.shortcuts import render, redirect
-import requests
-
-from .models import Movie, Genre
-from .serializers import MovieSerializer
-
 import datetime
 from pprint import pprint
+
+import requests
+from django.shortcuts import redirect, render
+from rest_framework import status
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+from rest_framework.response import Response
+
+from .models import Comment, Genre, Movie
+from .serializers import CommentSerializer, MovieSerializer
+
 API_KEY = '550af897681babc49f34957fa75cbee8'
 # Create your views here.
 
@@ -44,10 +46,10 @@ def dbInitialize():
             
     return 
 
-if not Movie.objects.all().count():
-    print('start API')
-    dbInitialize()
-    print('end API')
+# if not Movie.objects.all().count():
+#     print('start API')
+#     dbInitialize()
+#     print('end API')
 
 @api_view(["GET",])
 def getMovieList(request):
@@ -64,3 +66,20 @@ def getMovieDetail(request, movie_id):
             movie.trailer = video['key']
             break
     serializer = MovieSerializer(movie)
+    return Response(serializer.data)
+
+@api_view(['GET', 'POST'])
+def getComments(request, movie_id):
+    movie = Movie.objects.get(pk=movie_id)
+    if request.method == "GET":
+        comments = Comment.objects.all().filter(movie=movie)
+        serializer = CommentSerializer(comments)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    if request.method == "POST":
+        comment = Commnet()
+        comment.movie = movie
+        comment.user = request.user
+        print(request.data)
+        return redirect(f'api/v1/movies/{movie_id}')
+    return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
