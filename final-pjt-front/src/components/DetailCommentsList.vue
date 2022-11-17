@@ -4,13 +4,14 @@
     <DetailCommentsListItem
     v-for="(comment, index) in comments"
     :key="index"
-    :comment="comment"/>
+    :comment="comment"
+    />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import DetailCommentsListItem from "@/components/DetailCommentsListItem"
+import axios from 'axios'
 
 const API_URL = 'http://192.168.202.105:8000'
 
@@ -34,7 +35,6 @@ export default {
         url: `${API_URL}/api/v1/movies/${this.movie.id}/comment/`,
       })
       .then((res) => {
-        console.log(res.data)
         this.comments = res.data
       })
       .catch((error) => {

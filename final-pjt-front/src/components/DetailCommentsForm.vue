@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.prevent='createComment'>
+    <form @submit='createComment'>
       <input
         type="text"
         v-model='comment'
@@ -37,6 +37,9 @@ export default {
         headers: {
           Authorization: `Token ${this.$store.state.token}`
         }
+      })
+      .catch((err) => {
+        console.log(err)
       })
         
     }
