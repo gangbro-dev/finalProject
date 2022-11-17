@@ -2,6 +2,7 @@ import datetime
 from pprint import pprint
 
 import requests
+from django.conf import settings
 from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.decorators import api_view, renderer_classes
@@ -15,13 +16,15 @@ API_KEY = '550af897681babc49f34957fa75cbee8'
 # Create your views here.
 
 def dbInitialize():
+    PAGE_NUM = 50
     for gen in requests.get(f'https://api.themoviedb.org/3/genre/movie/list?api_key={API_KEY}&language=ko-KR').json()['genres']:
         genre = Genre()
         genre.id = gen['id']
         genre.name = gen['name']
         genre.save()
     print('get genre finished')
-    for idx in range(1, 51):
+    print(f'get movie startd (1 to {PAGE_NUM})')
+    for idx in range(1, PAGE_NUM + 1):
         url = f'https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}&language=ko-KR&page={idx}&region=kr'
         response = requests.get(url).json()['results']
         for res in response:
@@ -41,15 +44,20 @@ def dbInitialize():
             movie.save()
             for j in res['genre_ids']:
                 movie.genre.add(Genre.objects.get(id=j))
-        print(idx)
+        print(f'{idx}/{PAGE_NUM}')
     print('get movie finished')
             
     return 
 
-# if not Movie.objects.all().count():
-#     print('start API')
-#     dbInitialize()
-#     print('end API')
+try:
+    if not Movie.objects.all().count():
+        print('start API')
+        dbInitialize()
+        print('end API')
+except:
+    print('migrate first')
+
+
 
 @api_view(["GET",])
 def getMovieList(request):
@@ -73,13 +81,18 @@ def getComments(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
     if request.method == "GET":
         comments = Comment.objects.all().filter(movie=movie)
-        serializer = CommentSerializer(comments)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = CommentSerializer(comments, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == "POST":
-        comment = Commnet()
+        print(1)
+        comment = Comment()
         comment.movie = movie
         comment.user = request.user
-        print(request.data)
-        return redirect(f'api/v1/movies/{movie_id}')
-    return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        comment.content = request.data['comment']
+        comment.save()
+    return redirect(f'../{movie_id}')
+
+@api_view(['POST'])
+def clickLikeButton(request, movie_id):
+    pass
