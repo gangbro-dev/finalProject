@@ -43,7 +43,7 @@ def dbInitialize():
         print(idx)
     print('get movie finished')
             
-    return redirect('http://127.0.0.1:8000/movie/api/v1/')
+    return 
 
 if not Movie.objects.all().count():
     print('start API')
