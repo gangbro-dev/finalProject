@@ -1,8 +1,11 @@
 <template>
-  <div>
-    <h1>communityList</h1>
-    <CommunityListItem/>
-  </div>
+<div>
+  <hr>
+  <CommunityListItem
+  v-for="article in articles"
+  :key="article.id"
+  :article="article"/>
+</div>
 </template>
 
 <script>
@@ -12,6 +15,11 @@ export default {
   name: "CommunityList",
   components: {
     CommunityListItem,
+  },
+  computed: {
+    articles() {
+      return this.$store.state.articles
+    }
   }
 }
 </script>

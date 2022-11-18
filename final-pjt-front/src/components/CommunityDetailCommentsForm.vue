@@ -1,0 +1,52 @@
+<template>
+  <div>
+    <form @submit.prevent='createComment'>
+      <input type="text" v-model='comment'>
+      <button type="submit">확인</button>
+    </form>
+
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+
+export default {
+    name: 'CommunityDetailCommentsForm',
+    props: {
+      article: Object,
+    },
+    data() {
+      return {
+        comment : null,
+      }
+    },
+    methods : {
+      createComment() {
+        const comment = this.comment
+
+        axios({
+          method: 'post',
+          url:  `${this.$store.state.API_URL}/articles/${this.article.id}/comment/new/`,
+          data: {
+            comment,
+          },
+          headers: {
+            Authorization: `Token ${this.$store.state.token}`
+          }
+        })
+        .then(() => {
+          this.$emit('refresh_comments')
+          this.comment = null
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      }
+    }
+}
+</script>
+
+<style>
+
+</style>

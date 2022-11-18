@@ -35,6 +35,9 @@ export default new Vuex.Store({
       state.token = null
       localStorage.removeItem('user')
       location.reload();
+    },
+    GET_ARTICLES(state, articles) {
+      state.articles = articles
     }
   },
   actions: {
@@ -87,7 +90,7 @@ export default new Vuex.Store({
     getArticles(context) {
       axios ({
         method: 'get',
-        url: `${API_URL}/api/v1/article`
+        url: `${API_URL}/articles/`
       })
         .then((res) => {
           context.commit('GET_ARTICLES', res.data)

@@ -5,15 +5,19 @@
     v-for="(comment, index) in comments"
     :key="index"
     :comment="comment"
+    @refresh_comments='getComment'
     />
+    <DetailCommentsForm
+      :movie="movie"
+      @refresh_comments='getComment'/>
   </div>
 </template>
 
 <script>
 import DetailCommentsListItem from "@/components/DetailCommentsListItem"
+import DetailCommentsForm from '@/components/DetailCommentsForm'
 import axios from 'axios'
 
-// const API_URL = 'http://192.168.202.105:8000'
 
 export default {
   name: "DetailCommentsList",
@@ -24,6 +28,7 @@ export default {
   },
   components: {
     DetailCommentsListItem,
+    DetailCommentsForm,
   },
   props:{
     movie: Object,
@@ -37,8 +42,8 @@ export default {
       .then((res) => {
         this.comments = res.data
       })
-      .catch((error) => {
-        console.log(error)
+      .catch((err) => {
+        console.log(err)
       })
     }
   },
