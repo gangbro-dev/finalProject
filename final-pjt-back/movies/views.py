@@ -86,7 +86,6 @@ def comments(request, movie_id):
     if request.method == "GET":
         comments = Comment.objects.all().filter(movie=movie)
         serializer = CommentSerializer(comments, many=True)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "POST":
         comment = Comment()
@@ -94,11 +93,13 @@ def comments(request, movie_id):
         comment.user = request.user
         comment.content = request.data['comment']
         comment.save()
+        return Response(status=status.HTTP_201_CREATED)
     elif request.method == 'DELETE':
         comment = Comment.objects.get(pk=request.data['commentId'])
-        print(comment)
-        comment.delete()
-    return redirect(f'../../{movie_id}')
+        if request.user == comment.user:
+            comment.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])

@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-
+    user = UserSerializer(read_only=True)
     class Meta:
         model = Article
         fields = '__all__'
