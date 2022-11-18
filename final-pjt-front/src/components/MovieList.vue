@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h2>Movie List</h2>
-    <hr>
     <MovieListItem
       v-for='movie in movies'
       :key='movie.id'
