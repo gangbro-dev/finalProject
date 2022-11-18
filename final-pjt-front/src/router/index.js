@@ -6,13 +6,14 @@ import LoginView from '@/views/LoginView.vue'
 import DetailView from '@/views/DetailView.vue'
 import CommunityView from '@/views/CommunityView.vue'
 import CreateView from '@/views/CreateView.vue'
+import UpdateView from '@/views/UpdateView'
 import CommunityDetailView from '@/views/CommunityDetailView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/movie',
     name: 'MovieView',
     component: MovieView
   },
@@ -37,12 +38,17 @@ const routes = [
     component: CreateView
   },
   {
-    path: '/communitydetail',
+    path: '/community/:article_id/update',
+    name: 'UpdateView',
+    component: UpdateView
+  },
+  {
+    path: '/community/:id',
     name: 'CommunityDetailView',
     component: CommunityDetailView
   },
   {
-    path: '/:id',
+    path: '/movie/:id',
     name: 'DetailView',
     component: DetailView
   },

@@ -10,7 +10,6 @@
 <script>
 import axios from 'axios'
 
-// const API_URL = 'http://192.168.202.105:8000'
 
 export default {
   name: "DetailCommentsListItem",
@@ -20,16 +19,21 @@ export default {
   methods: {
     deleteComment() {
       const commentId = this.comment.id
-      console.log(this.comment.movie.id)
       axios ({
         method: 'delete',
         url: `${this.$store.state.API_URL}/api/v1/movies/${this.comment.movie.id}/comment/`,
-        data: {commentId: commentId}
+        data: {commentId: commentId},
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`
+        }
+      })
+      .then(() => {
+        this.$emit('refresh_comments')
       })
       .catch((err) => {
         console.log(err)
       })
-      this.$router.go(this.$router.currentRoute) 
+      // this.$router.go(this.$router.currentRoute) 
     }
   }
 }

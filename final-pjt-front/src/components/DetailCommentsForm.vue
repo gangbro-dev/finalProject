@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit='createComment'>
+    <form @submit.prevent='createComment'>
       <input
         type="text"
         v-model='comment'
@@ -13,7 +13,6 @@
 <script>
 import axios from 'axios'
 
-// const API_URL = 'http://192.168.202.105:8000'
 export default {
   name: 'DetailCommentsForm',
   props: {
@@ -32,12 +31,15 @@ export default {
         method: 'post',
         url: `${this.$store.state.API_URL}/api/v1/movies/${this.movie.id}/comment/`,
         data: {
-          // userToken: this.$store.state.token,
           comment,
         },
         headers: {
           Authorization: `Token ${this.$store.state.token}`
         }
+      })
+      .then(() => {
+        this.$emit('refresh_comments')
+        this.comment = null
       })
       .catch((err) => {
         console.log(err)
