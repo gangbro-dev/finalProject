@@ -19,7 +19,7 @@
 <script>
 import axios from 'axios'
 
-const API_URL = 'http://192.168.202.105:8000'
+// const API_URL = 'http://192.168.202.105:8000'
 
 export default {
   name: 'DetailMovie',
@@ -40,7 +40,7 @@ export default {
     getLike() {
       axios({
         method: "post",
-        url: `${API_URL}/api/v1/movies/${this.movie.id}/is_liked/`,
+        url: `${this.$store.state.API_URL}/api/v1/movies/${this.movie.id}/is_liked/`,
         headers: {
           Authorization: `Token ${this.$store.state.token}`
         }
@@ -54,9 +54,10 @@ export default {
         })
     },
     checkLike() {
+      
       axios({
         method: "get",
-        url: `${API_URL}/api/v1/movies/${this.movie.id}/is_liked/`,
+        url: `${this.$store.state.API_URL}/api/v1/movies/${this.movie.id}/is_liked/`,
         headers: {
           Authorization: `Token ${this.$store.state.token}`
         }
@@ -71,6 +72,7 @@ export default {
     }
   },
   beforeMount() {
+    console.log(this.$store.state.API_URL)
     this.is_like = this.checkLike()
   }
 }

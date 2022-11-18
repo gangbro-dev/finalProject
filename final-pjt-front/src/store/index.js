@@ -6,7 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.202.105:8000'
+const API_URL = 'http://192.168.0.2:8000'
 
 export default new Vuex.Store({
   plugins: [
@@ -14,7 +14,9 @@ export default new Vuex.Store({
   ],
   state: {
     movies: [],
+    articles: [],
     token: null,
+    API_URL : API_URL
   },
   getters: {
     isLogin(state) {
@@ -82,7 +84,19 @@ export default new Vuex.Store({
     logout(context) {
       context.commit('LOGOUT')
     },
-    },
+    getArticles(context) {
+      axios ({
+        method: 'get',
+        url: `${API_URL}/api/v1/article`
+      })
+        .then((res) => {
+          context.commit('GET_ARTICLES', res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  },
   modules: {
   }
 })

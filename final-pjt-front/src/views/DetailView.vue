@@ -8,13 +8,15 @@
     :movie="movie"/>
     <DetailCommentsList
     :movie="movie"/>
+    <DetailVideo
+    :movie="movie"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 
-const API_URL = 'http://192.168.202.105:8000'
+// const API_URL = 'http://192.168.0.2:8000'
 // const key = "550af897681babc49f34957fa75cbee8"
 // const url = `https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=${key}&language=ko-KR`
 
@@ -22,6 +24,7 @@ const API_URL = 'http://192.168.202.105:8000'
 import DetailMovie from '@/components/DetailMovie'
 import DetailCommentsForm from '@/components/DetailCommentsForm'
 import DetailCommentsList from '@/components/DetailCommentsList'
+import DetailVideo from '@/components/DetailVideo'
 
 export default {
   name: "DetailView",
@@ -29,6 +32,7 @@ export default {
     DetailMovie,
     DetailCommentsForm,
     DetailCommentsList,
+    DetailVideo,
   },
   data() {
     return {
@@ -43,7 +47,8 @@ export default {
     getMovieDetail() {
       axios({
         method: 'get',
-        url: `${API_URL}/api/v1/movies/${this.$route.params.id}`
+        url: `${this.$store.state.API_URL}/api/v1/movies/${this.$route.params.id}`
+
       })
         .then((res) => {
           // console.log(res)

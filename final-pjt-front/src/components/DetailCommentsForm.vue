@@ -13,7 +13,7 @@
 <script>
 import axios from 'axios'
 
-const API_URL = 'http://192.168.202.105:8000'
+// const API_URL = 'http://192.168.202.105:8000'
 export default {
   name: 'DetailCommentsForm',
   props: {
@@ -27,9 +27,10 @@ export default {
   methods: {
     createComment() {
       const comment = this.comment
+      
       axios({
         method: 'post',
-        url: `${API_URL}/api/v1/movies/${this.movie.id}/comment/`,
+        url: `${this.$store.state.API_URL}/api/v1/movies/${this.movie.id}/comment/`,
         data: {
           // userToken: this.$store.state.token,
           comment,
