@@ -2,12 +2,10 @@ import datetime
 from pprint import pprint
 
 import requests
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 
 from .models import Comment, Genre, Movie
@@ -116,7 +114,7 @@ def clickLikeButton(request, movie_id):
         movie = Movie.objects.get(pk=movie_id)
         if request.user in movie.like_users.all():
             movie.like_users.remove(request.user)
-            return Response({'like': False}, status=status.HTTP_200_OK)
+            return Response({'like': False}, status=status.HTTP_201_CREATED)
         else:
             movie.like_users.add(request.user)
             return Response({'like': True}, status=status.HTTP_200_OK)

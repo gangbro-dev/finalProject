@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-cs!6q)!y9d9(e!j!tw91ay*rt+j$ptt1sgi9y$!!k5^ifqq!n5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.202.105', 'localhost']
+ALLOWED_HOSTS = ['192.168.0.2', 'localhost']
 
 
 # Application definition
@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # 우리가 쓰는 앱들
     'accounts',
     'movies',
+    'articles',
 
     'rest_framework',
 
