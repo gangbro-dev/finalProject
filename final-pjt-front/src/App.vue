@@ -5,7 +5,8 @@
       <router-link :to="{ name : 'SignUpView' }">SignUpPage</router-link> |
       <router-link v-if='!isLogin' :to="{ name : 'LoginView' }">LoginPage</router-link>
       <a v-else type='button' class='logoutButton' @click='logout' >Logout</a> |
-      <router-link :to="{ name : 'CommunityView' }">Community</router-link>
+      <router-link :to="{ name : 'CommunityView' }">Community</router-link> |
+      <router-link :to="{ name : 'ProfileView'}">Profile</router-link>
 
     </nav>
     <router-view/>

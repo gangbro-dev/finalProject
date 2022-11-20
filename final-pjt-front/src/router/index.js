@@ -6,8 +6,9 @@ import LoginView from '@/views/LoginView.vue'
 import DetailView from '@/views/DetailView.vue'
 import CommunityView from '@/views/CommunityView.vue'
 import CreateView from '@/views/CreateView.vue'
-import UpdateView from '@/views/UpdateView'
+import UpdateView from '@/views/UpdateView.vue'
 import CommunityDetailView from '@/views/CommunityDetailView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,11 @@ const routes = [
     path: '/create',
     name: 'CreateView',
     component: CreateView
+  },
+  {
+    path: '/profile',
+    name: 'ProfileView',
+    component: ProfileView
   },
   {
     path: '/community/:article_id/update',
