@@ -5,6 +5,7 @@ from pprint import pprint
 import requests
 from accounts.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -18,7 +19,7 @@ API_KEY = '550af897681babc49f34957fa75cbee8'
 
 
 def dbInitialize():
-    PAGE_NUM = 50
+    PAGE_NUM = 100
     for gen in requests.get(f'https://api.themoviedb.org/3/genre/movie/list?api_key={API_KEY}&language=ko-KR').json()['genres']:
         genre = Genre()
         genre.id = gen['id']
@@ -165,16 +166,51 @@ def 대표작이_디비에_있을까요_없을까요(video):
         return movie.pk
 
 
-def get_recommamd_list():
-    like_movie_list = User.objects.get(pk=1).like_movies.all()
-    genre_count = dict()
-    for like_movie in like_movie_list:
-        for like_genre in like_movie.genre.all():
-            if like_genre.name in genre_count.keys():
-                genre_count[like_genre.name] += 1
-            else:
-                genre_count[like_genre.name] = 1
-    genre_count = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
-    return genre_count
+# def get_recommamd_list():
+#     like_movie_list = User.objects.get(pk=1).like_movies.all()
+#     recommanded_list = []
+#     genre_count = dict()
+#     for like_movie in like_movie_list:
+#         for like_genre in like_movie.genre.all():
+#             if like_genre.id in genre_count.keys():
+#                 genre_count[like_genre.id] += 1
+#             else:
+#                 genre_count[like_genre.id] = 1
+#         recommanded_list.append(like_movie.pk)
+#     pprint(recommanded_list)
+#     genre_count = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
+    
+#     recommand_queue = []
+#     # -------------- 추천 알고리즘 어케 뽑지 --------------------------
+#     # 목표: 추천 대기열 N개 만들기
+#     # 일단, 가장 좋아하는 장르를 찾자(여러개 일 수 도 있다! 왜냐 좋아요 표시한 영화가 액션 5개 로멘스 5개 일 수 있음)
+#     # 그러므로 우선 vue에서 좋아하는 장르를 선택하게 할 것 (request.data.fav_genre)에 넣어두자(이름으로)
+#     # 근데? 너무 많은 장르를 선택하면 영화가 하나도 없을 수 가 있다(최대 3개)
+#     # 그럼 그 장르의 영화들을 뽑자 어떻게? and연산으로 어디서? 밑에서 (1.)
+#     # 여기서 5개 보여줌
+#     # --------------------------------------------------------------
+#     # 1.
+#     fav_genres = ['']
+#     # fav_genre = request.data['fav_genre']
+#     cnt = 0
+#     while (cnt < 5) & bool(fav_genres):
+#         print(fav_genres)
+#         rst = Movie.objects.all()
+#         for fav_genre in fav_genres:
+#             rst = rst.filter(Q(genre=Genre.objects.get(name=fav_genre)))
+#         for movie in rst:
+#             if movie.id not in recommanded_list:
+#                 recommand_queue.append(movie)
+#                 recommanded_list.append(movie.id)
+#                 print(movie)
+#                 cnt += 1
+#             if (cnt >= 5):
+#                 break
+#         else: # 야 조건이 빡빡해 3개가 안뽑혀
+#             fav_genres = fav_genres[:-1]
+            
+    
+#     return recommand_queue
 
-pprint(get_recommamd_list())
+
+# pprint(get_recommamd_list())
