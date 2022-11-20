@@ -17,7 +17,8 @@ class Movie(models.Model):
     poster_path=models.CharField(max_length=50)
     tmdb_id = models.IntegerField()
     trailer=models.CharField(max_length=50)
-    # director=models.CharField(max_length=50)
+    actors= models.TextField()
+    director=models.CharField(max_length=50)
 
 
 class Genre(models.Model):
