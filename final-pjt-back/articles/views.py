@@ -1,15 +1,16 @@
 import datetime
 from pprint import pprint
 
+from accounts.models import User
 # import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
 from .models import Article, Comment
 from .serializers import ArticleSerializer, CommentSerializer
-from accounts.models import User
 
 # Create your views here.
 

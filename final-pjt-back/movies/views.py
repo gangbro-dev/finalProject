@@ -1,7 +1,9 @@
 import datetime
+import json
 from pprint import pprint
 
 import requests
+from accounts.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from rest_framework import status
@@ -28,9 +30,13 @@ def dbInitialize():
         url = f'https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}&language=ko-KR&page={idx}&region=kr'
         response = requests.get(url).json()['results']
         for res in response:
-            # for crew in requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()['crew']:
-            #     if crew['job'] == 'Director':
-            #         director = crew['name']
+            credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
+            actors = []
+            for actor in credit['cast'][:5]:
+                actors.append({'name': actor['name'], 'id': actor['id']})
+            for crew in credit['crew']:
+                if crew['job'] == 'Director':
+                    director = crew['name']
             movie = Movie()
             movie.title = res['title']
             movie.overview = res['overview']
@@ -40,7 +46,8 @@ def dbInitialize():
             movie.poster_path = res['poster_path']
             movie.tmdb_id = res['id']
             movie.trailer = 'None'
-            # movie.director = director
+            movie.actors = json.dumps(actors)
+            movie.director = director
             movie.save()
             for j in res['genre_ids']:
                 movie.genre.add(Genre.objects.get(id=j))
@@ -119,3 +126,55 @@ def clickLikeButton(request, movie_id):
         else:
             movie.like_users.add(request.user)
             return Response({'like': True}, status=status.HTTP_200_OK)
+
+
+def 응애_대표작찾아줘(id, 요청한횟수):
+    request_url = f'https://api.themoviedb.org/3/person/{id}/movie_credits?api_key={API_KEY}&language=ko-KR'
+    video = requests.get(request_url).json()['cast'][요청한횟수]
+    return video
+
+
+def 대표작이_디비에_있을까요_없을까요(video):
+    try:
+        return Movie.objects.get(tmdb_id=video['id']).pk
+    except:
+        request_url = 'https://api.themoviedb.org/3/movie/{id}?api_key={API_URL}&language=ko-KR'
+        res = requests.get(request_url).json()
+        credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
+        actors = []
+        for actor in credit['cast'][:5]:
+            actors.append({'name': actor['name'], 'id': actor['id']})
+        for crew in credit['crew']:
+            if crew['job'] == 'Director':
+                director = crew['name']
+        movie = Movie()
+        movie.title = res['title']
+        movie.overview = res['overview']
+        movie.rate = int(res['vote_average'] * 10)
+        movie.popularity = res['popularity'] * 1000
+        movie.release_date = datetime.datetime.strptime(res['release_date'], '%Y-%m-%d').date()
+        movie.poster_path = res['poster_path']
+        movie.tmdb_id = res['id']
+        movie.trailer = 'None'
+        movie.actors = json.dumps(actors)
+        movie.director = director
+        movie.save()
+        for j in res['genre_ids']:
+            movie.genre.add(Genre.objects.get(id=j))
+
+        return movie.pk
+
+
+def get_recommamd_list():
+    like_movie_list = User.objects.get(pk=1).like_movies.all()
+    genre_count = dict()
+    for like_movie in like_movie_list:
+        for like_genre in like_movie.genre.all():
+            if like_genre.name in genre_count.keys():
+                genre_count[like_genre.name] += 1
+            else:
+                genre_count[like_genre.name] = 1
+    genre_count = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
+    return genre_count
+
+pprint(get_recommamd_list())
