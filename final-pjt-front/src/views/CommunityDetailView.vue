@@ -2,6 +2,7 @@
   <div v-if='article'>
     <p>글 번호 : {{ article?.id }}</p>
     <p>제목 : {{ article?.title }} </p>
+    <router-link :to="{ name :'ProfileView', params:{user_name : article.user.username} }">작성자 : {{ article?.user.username }}</router-link>
     <p>내용 : {{ article?.content }}</p>
     <p>작성시간 : {{ article?.created_at }}</p>
     <p>수정시간 : {{ article?.updated_at }}</p>
