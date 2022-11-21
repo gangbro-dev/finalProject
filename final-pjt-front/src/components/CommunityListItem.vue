@@ -1,8 +1,19 @@
 <template>
   <div>
-    <router-link :to="{ name: 'CommunityDetailView', params: {id : article.id} }">
-      <p>{{ article.title }}</p>
-      <p>작성자: {{ article.user.username }} </p>
+    <router-link :to="{ name: 'CommunityDetailView', params: {id : article.id} }" style="text-decoration: none;">
+      <div class="d-flex justify-content-between p-2" >
+        <div class="communutySpan title" style="text-decoration: none;">{{ article.title }}</div> 
+        <div class="communutySpan information d-flex">
+          <div style="width: 80px">
+            {{ article.user.username }}
+          </div> 
+          <div class="ms-2" style="width: 90px;">
+            {{article.updated_at | date }}
+          </div>
+        </div>
+
+
+      </div>
     </router-link>
     <hr>
   </div>
@@ -13,10 +24,35 @@ export default {
   name: "CommunityListItem",
   props: {
     article: Object,
+  },
+  filters: {
+    date(data) {
+      console.log(data)
+      console.log(typeof(data))
+      return data.substr(0, 10)
+    }
+
   }
 }
 </script>
 
 <style>
-
+hr {
+  margin: 0px !important;
+}
+.communutySpan {
+  text-decoration: none ;
+  text-decoration-style: bold;
+  color: black;
+}
+.information {
+  color: gray !important;
+}
+.title {
+  font-weight: bold;
+}
+#간단정보 {
+  text-decoration-line: none;
+  text-decoration-color: none;
+}
 </style>

@@ -27,6 +27,7 @@ export default {
 
 <style>
 img {
-  width : 12em;
+  width : 12rem;
+  height: 18rem;
 }
 </style>

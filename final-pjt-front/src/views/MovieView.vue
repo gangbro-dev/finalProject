@@ -17,7 +17,6 @@ export default {
   Beforecreate () {
     this.$store.dispatch('getMovies')
   }
-
 }
 </script>
 
