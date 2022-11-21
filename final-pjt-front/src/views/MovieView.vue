@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>movie</h1>
+    <h1>Movie</h1>
     <hr>
     <MovieList/>
   </div>
@@ -14,16 +14,9 @@ export default {
   components: {
     MovieList,
   },
-  
-  methods: {
-    getMovies() {
-      this.$store.dispatch('getMovies')
-    }
-  },
-  created () {
-    this.getMovies()
+  Beforecreate () {
+    this.$store.dispatch('getMovies')
   }
-
 }
 </script>
 

@@ -1,29 +1,46 @@
 <template>
-  <div id="app" class="container">
-    <nav>
-      <router-link :to="{ name : 'MovieView'}" >Movie</router-link> |
-      <router-link :to="{ name : 'SignUpView' }">SignUpPage</router-link> |
-      <router-link v-if='!isLogin' :to="{ name : 'LoginView' }">LoginPage</router-link>
-      <a v-else type='button' class='logoutButton' @click='logout' >Logout</a> |
-      <router-link :to="{ name : 'CommunityView' }">Community</router-link>
-
+  <div id="app" >
+    <nav class="navbar navbar-expand-lg bg-light d-flex justify-content-between">
+      <span id='nav-menu'>
+        <router-link :to="{ name : 'MovieView'}" >Movie</router-link> |
+        <router-link :to="{ name : 'CommunityView' }">Community</router-link> |
+        <router-link :to="{ name : 'RecommendView' }">Recommend</router-link> 
+      </span>
+      <span id="nav-account" v-if='!isLogin'>
+        <router-link  :to="{ name : 'SignUpView' }">SignUp</router-link> |
+        <router-link  :to="{ name : 'LoginView' }">Login</router-link>
+      </span>
+      <span id="nav-account" v-else>
+        <router-link :to="{ name : 'ProfileView', params: {user_name : user} }">Profile</router-link> |
+        <a type='button' class='logoutButton' @click='logout' >Logout</a> 
+      </span>
     </nav>
-    <router-view/>
+    <router-view class='container'/>
   </div>
 </template>
 
 <script>
+
 export default {
   computed: {
     isLogin() {
       return this.$store.getters.isLogin
+    },
+    user() {
+      return this.$store.state.user.username
     }
+
   },
   methods: {
     logout() {
       this.$store.dispatch('logout')
-    }
+      this.$router.push({name : 'LoginView'})
+    },
+  },
+  beforeCreate() {
+    this.$store.dispatch('getUser')
   }
+  
 }
 </script>
 
@@ -47,5 +64,13 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+
+#nav-menu {
+  margin: 0px 2rem 0px;
+}
+
+#nav-account {
+  margin: 0px 2rem 0px;
 }
 </style>

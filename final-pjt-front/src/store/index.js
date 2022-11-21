@@ -6,17 +6,18 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.0.2:8000'
+const API_URL = 'http://192.168.202.105:8000'
 
 export default new Vuex.Store({
   plugins: [
     createPersistedState()
   ],
   state: {
-    movies: [],
+    movies: null,
     articles: [],
     token: null,
-    API_URL : API_URL
+    API_URL : API_URL,
+    user: null,
   },
   getters: {
     isLogin(state) {
@@ -34,25 +35,33 @@ export default new Vuex.Store({
     LOGOUT(state) {
       state.token = null
       localStorage.removeItem('user')
-      location.reload();
+      // location.reload();
     },
     GET_ARTICLES(state, articles) {
       state.articles = articles
+    },
+    GET_USER(state, user) {
+      state.user = user
     }
   },
   actions: {
     getMovies(context) {
-      axios({
-        method: 'get',  
-        url: `${API_URL}/api/v1/movies/`,
-      })
-        .then((res) => {
-          context.commit('GET_MOVIES', res.data)
-
+      if (context.state.movies) {
+        return
+      }
+      else {
+        axios({
+          method: 'get',  
+          url: `${API_URL}/api/v1/movies/`,
         })
-        .catch((err) => {
-          console.log(err)
-        })
+          .then((res) => {
+            context.commit('GET_MOVIES', res.data)
+  
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
     },
     signUp(context, payload) {
       axios({
@@ -82,6 +91,7 @@ export default new Vuex.Store({
       })
         .then((res) => {
           context.commit('SAVE_TOKEN', res.data.key)
+          context.dispatch('getUser')
         })
     },
     logout(context) {
@@ -98,6 +108,21 @@ export default new Vuex.Store({
         .catch((err) => {
           console.log(err)
         })
+    },
+    getUser(context) {
+      axios ({
+        method: 'get',
+        url: `${API_URL}/accounts/user`,
+        headers: {
+          Authorization: `Token ${context.state.token}`
+        }
+      })
+      .then((res) => {
+        context.commit('GET_USER', res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     }
   },
   modules: {

@@ -18,53 +18,53 @@ API_KEY = '550af897681babc49f34957fa75cbee8'
 # Create your views here.
 
 
-def dbInitialize():
-    PAGE_NUM = 100
-    for gen in requests.get(f'https://api.themoviedb.org/3/genre/movie/list?api_key={API_KEY}&language=ko-KR').json()['genres']:
-        genre = Genre()
-        genre.id = gen['id']
-        genre.name = gen['name']
-        genre.save()
-    print('get genre finished')
-    print(f'get movie startd (1 to {PAGE_NUM})')
-    for idx in range(1, PAGE_NUM + 1):
-        url = f'https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}&language=ko-KR&page={idx}&region=kr'
-        response = requests.get(url).json()['results']
-        for res in response:
-            credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
-            actors = []
-            for actor in credit['cast'][:5]:
-                actors.append({'name': actor['name'], 'id': actor['id']})
-            for crew in credit['crew']:
-                if crew['job'] == 'Director':
-                    director = crew['name']
-            movie = Movie()
-            movie.title = res['title']
-            movie.overview = res['overview']
-            movie.rate = int(res['vote_average'] * 10)
-            movie.popularity = res['popularity'] * 1000
-            movie.release_date = datetime.datetime.strptime(res['release_date'], '%Y-%m-%d').date()
-            movie.poster_path = res['poster_path']
-            movie.tmdb_id = res['id']
-            movie.trailer = 'None'
-            movie.actors = json.dumps(actors)
-            movie.director = director
-            movie.save()
-            for j in res['genre_ids']:
-                movie.genre.add(Genre.objects.get(id=j))
-        print(f'{idx}/{PAGE_NUM}')
-    print('get movie finished')
+# def dbInitialize():
+#     PAGE_NUM = 100
+#     for gen in requests.get(f'https://api.themoviedb.org/3/genre/movie/list?api_key={API_KEY}&language=ko-KR').json()['genres']:
+#         genre = Genre()
+#         genre.id = gen['id']
+#         genre.name = gen['name']
+#         genre.save()
+#     print('get genre finished')
+#     print(f'get movie startd (1 to {PAGE_NUM})')
+#     for idx in range(1, PAGE_NUM + 1):
+#         url = f'https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}&language=ko-KR&page={idx}&region=kr'
+#         response = requests.get(url).json()['results']
+#         for res in response:
+#             credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
+#             actors = []
+#             for actor in credit['cast'][:5]:
+#                 actors.append({'name': actor['name'], 'id': actor['id']})
+#             for crew in credit['crew']:
+#                 if crew['job'] == 'Director':
+#                     director = crew['name']
+#             movie = Movie()
+#             movie.title = res['title']
+#             movie.overview = res['overview']
+#             movie.rate = int(res['vote_average'] * 10)
+#             movie.popularity = res['popularity'] * 1000
+#             movie.release_date = datetime.datetime.strptime(res['release_date'], '%Y-%m-%d').date()
+#             movie.poster_path = res['poster_path']
+#             movie.tmdb_id = res['id']
+#             movie.trailer = 'None'
+#             movie.actors = json.dumps(actors)
+#             movie.director = director
+#             movie.save()
+#             for j in res['genre_ids']:
+#                 movie.genre.add(Genre.objects.get(id=j))
+#         print(f'{idx}/{PAGE_NUM}')
+#     print('get movie finished')
             
-    return 
+#     return 
 
 
-try:
-    if not Movie.objects.all().count():
-        print('start API')
-        dbInitialize()
-        print('end API')
-except:
-    print('migrate first')
+# try:
+#     if Movie.objects.all().count():
+#         print('start API')
+#         dbInitialize()
+#         print('end API')
+# except:
+#     print('migrate first')
 
 
 @api_view(["GET",])
@@ -129,9 +129,17 @@ def clickLikeButton(request, movie_id):
             return Response({'like': True}, status=status.HTTP_200_OK)
 
 
-def 응애_대표작찾아줘(id, 요청한횟수):
+@api_view(['GET',])
+def getLikeMovie(request, username):
+    data = User.objects.get(username=username).like_movies.all()
+    serializer = MovieSerializer(data, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+def 응애_대표작찾아줘(id, 요청횟수):
     request_url = f'https://api.themoviedb.org/3/person/{id}/movie_credits?api_key={API_KEY}&language=ko-KR'
-    video = requests.get(request_url).json()['cast'][요청한횟수]
+    response = requests.get(request_url).json()['cast']
+    video = sorted(response, key=lambda x: x['popularity'])[-요청횟수]
     return video
 
 
@@ -139,8 +147,9 @@ def 대표작이_디비에_있을까요_없을까요(video):
     try:
         return Movie.objects.get(tmdb_id=video['id']).pk
     except:
-        request_url = 'https://api.themoviedb.org/3/movie/{id}?api_key={API_URL}&language=ko-KR'
+        request_url = f'https://api.themoviedb.org/3/movie/{video["id"]}?api_key={API_KEY}&language=ko-KR'
         res = requests.get(request_url).json()
+        print(res)
         credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
         actors = []
         for actor in credit['cast'][:5]:
@@ -160,27 +169,36 @@ def 대표작이_디비에_있을까요_없을까요(video):
         movie.actors = json.dumps(actors)
         movie.director = director
         movie.save()
-        for j in res['genre_ids']:
-            movie.genre.add(Genre.objects.get(id=j))
+        for genre in res['genres']:
+            movie.genre.add(Genre.objects.get(id=genre['id']))
 
         return movie.pk
 
-
-def get_recommamd_list():
-    # like_movie_list = User.objects.get(pk=1).like_movies.all()
-    recommanded_list = []
-    # genre_count = dict()
-    # for like_movie in like_movie_list:
-    #     for like_genre in like_movie.genre.all():
-    #         if like_genre.id in genre_count.keys():
-    #             genre_count[like_genre.id] += 1
-    #         else:
-    #             genre_count[like_genre.id] = 1
-    #     recommanded_list.append(like_movie.pk)
-    # pprint(recommanded_list)
-    # genre_count = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
+@ api_view(['GET',])
+def get_recommend_list(request):
+    like_movie_list = request.user.like_movies.all()
+    recommended_list = list()
+    like_actors_count = dict()
+    genre_count = dict()
+    for like_movie in like_movie_list:
+        # 좋아하는 장르 추출
+        for like_genre in like_movie.genre.all():
+            if like_genre.name in genre_count.keys():
+                genre_count[like_genre.name] += 1
+            else:
+                genre_count[like_genre.name] = 1
+        # 좋아하는 배우 추출(우선 간판 1명만 써보자)
+        like_actor = json.loads(like_movie.actors)[0]['id']
+        if like_actor in like_actors_count.keys():
+            like_actors_count[like_actor] += 1
+        else:
+            like_actors_count[like_actor] = 1
+        # 확인한 영화 추천안함목록에 추가
+        recommended_list.append(like_movie.pk)
+    genre_count = sorted(genre_count.items(), key=lambda x: x[1])
+    like_actors_count = sorted(like_actors_count.items(), key=lambda x: x[1])
     
-    recommand_queue = []
+    recommend_querySet = Movie.objects.none()
     # -------------- 추천 알고리즘 어케 뽑지 --------------------------
     # 목표: 추천 대기열 N개 만들기
     # 일단, 가장 좋아하는 장르를 찾자(여러개 일 수 도 있다! 왜냐 좋아요 표시한 영화가 액션 5개 로멘스 5개 일 수 있음)
@@ -188,29 +206,52 @@ def get_recommamd_list():
     # 근데? 너무 많은 장르를 선택하면 영화가 하나도 없을 수 가 있다(최대 3개)
     # 그럼 그 장르의 영화들을 뽑자 어떻게? and연산으로 어디서? 밑에서 (1.)
     # 여기서 5개 보여줌
+    # 이제 배우 기반으로 영화 찾아보자 (2.)
     # --------------------------------------------------------------
-    # 1.
-    fav_genres = ['TV 영화']
-    # fav_genre = request.data['fav_genre']
+    # 1. 장르별 추천
+    # fav_genres = ['액션']
+    fav_genres = list()
+    fav_genres.append(genre_count.pop()[0])
+    fav_genres.append(genre_count.pop()[0])
     cnt = 0
     while (cnt < 5) & bool(fav_genres):
-        print(fav_genres)
         rst = Movie.objects.all()
         for fav_genre in fav_genres:
             rst = rst.filter(Q(genre=Genre.objects.get(name=fav_genre)))
         for movie in rst:
-            if movie.id not in recommanded_list:
-                recommand_queue.append(movie)
-                recommanded_list.append(movie.id)
-                print(movie)
+            if movie.id not in recommended_list:
+                recommend_querySet = recommend_querySet.union(Movie.objects.filter(pk=movie.id))
+                recommended_list.append(movie.id)
                 cnt += 1
             if (cnt >= 5):
                 break
         else: # 야 조건이 빡빡해 3개가 안뽑혀
             fav_genres = fav_genres[:-1]
-            
-    
-    return recommand_queue
-
-
-pprint(get_recommamd_list())
+    pprint('1. done')
+    # pprint(recommend_querySet)
+    # 2. 배우별 추천
+    cnt = 0
+    while (cnt < 3) & bool(fav_genres):
+        if like_actors_count:
+            best_actor = like_actors_count.pop()[0]
+        else:
+            break
+        idx = 1
+        while True:
+            cast_data = 응애_대표작찾아줘(best_actor, idx)
+            movie_pk = 대표작이_디비에_있을까요_없을까요(cast_data)
+            movie = Movie.objects.get(pk=movie_pk)
+            if movie.id not in recommended_list:
+                    recommend_querySet = recommend_querySet.union(Movie.objects.filter(pk=movie.id))
+                    recommended_list.append(movie.id)
+                    cnt += 1
+                    # print('추가햇지롱')
+                    break
+            else:
+                # print('못추가햇지롱')
+                idx += 1
+        if (cnt >= 5):
+            break
+    # print(recommend_querySet)
+    result = MovieSerializer(recommend_querySet, many=True)
+    return Response(result.data, status=status.HTTP_200_OK)

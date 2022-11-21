@@ -1,5 +1,16 @@
 <template>
 <div>
+  <div class="d-flex justify-content-between">
+    <div>제목</div>
+    <div>
+      <span class="mx-3">
+        작성자
+      </span> 
+      <span class="mx-3">
+        작성 시간
+      </span> 
+    </div>
+  </div>
   <hr>
   <CommunityListItem
   v-for="article in articles"
