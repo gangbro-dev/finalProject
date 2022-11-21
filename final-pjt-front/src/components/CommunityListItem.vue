@@ -27,8 +27,6 @@ export default {
   },
   filters: {
     date(data) {
-      console.log(data)
-      console.log(typeof(data))
       return data.substr(0, 10)
     }
 

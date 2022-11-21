@@ -28,6 +28,6 @@ export default {
 <style>
 img {
   width : 12rem;
-  height: 18rem;
+  height: 17rem;
 }
 </style>

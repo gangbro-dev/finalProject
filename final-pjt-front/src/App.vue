@@ -29,12 +29,10 @@ export default {
     user() {
       return this.$store.state.user.username
     }
-
   },
   methods: {
     logout() {
       this.$store.dispatch('logout')
-      this.$router.push({name : 'LoginView'})
     },
   },
   beforeCreate() {

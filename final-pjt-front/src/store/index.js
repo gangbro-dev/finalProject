@@ -6,7 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.202.105:8000'
+const API_URL = 'http://192.168.0.2:8000'
 
 export default new Vuex.Store({
   plugins: [
@@ -18,6 +18,7 @@ export default new Vuex.Store({
     token: null,
     API_URL : API_URL,
     user: null,
+    likeMovies: [],
   },
   getters: {
     isLogin(state) {
@@ -35,18 +36,22 @@ export default new Vuex.Store({
     LOGOUT(state) {
       state.token = null
       localStorage.removeItem('user')
-      // location.reload();
+      router.push({name : 'LoginView'})
     },
     GET_ARTICLES(state, articles) {
       state.articles = articles
     },
     GET_USER(state, user) {
       state.user = user
-    }
+    },
+    GET_LIKE_MOVIE(state, likeMovies) {
+      state.likeMovies = likeMovies
+    },
   },
   actions: {
+    // 영화 정보 가져오기
     getMovies(context) {
-      if (context.state.movies) {
+      if (context.state.movies.length >= 2000) {
         return
       }
       else {
@@ -63,6 +68,7 @@ export default new Vuex.Store({
           })
       }
     },
+    // 회원가입
     signUp(context, payload) {
       axios({
         method: "post",
@@ -80,6 +86,7 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
+    // 로그인
     login(context, payload) {
       axios({
         method: "post",
@@ -94,9 +101,11 @@ export default new Vuex.Store({
           context.dispatch('getUser')
         })
     },
+    // 로그아웃
     logout(context) {
       context.commit('LOGOUT')
     },
+    // 게시판 전제 가져오기
     getArticles(context) {
       axios ({
         method: 'get',
@@ -109,21 +118,40 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
+    // 현재 로그인된 유저 이름 가져오기
     getUser(context) {
-      axios ({
+      if (context.state.token) {
+        axios ({
+          method: 'get',
+          url: `${API_URL}/accounts/user`,
+          headers: {
+            Authorization: `Token ${context.state.token}`
+          }
+        })
+        .then((res) => {
+          context.commit('GET_USER', res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      }
+    },
+    // 입력한 유저의 좋아요 표시한 영화 가져오기
+    getLikeMovie(context, user) {
+      axios({
         method: 'get',
-        url: `${API_URL}/accounts/user`,
+        url: `${context.state.API_URL}/api/v1/movies/like_movies/${user}`,
         headers: {
           Authorization: `Token ${context.state.token}`
         }
       })
-      .then((res) => {
-        context.commit('GET_USER', res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    }
+        .then((res) => {
+          context.commit('GET_LIKE_MOVIE', res.data)
+        }) 
+        .catch((err) => {
+          console.log(err)
+        })
+    },
   },
   modules: {
   }

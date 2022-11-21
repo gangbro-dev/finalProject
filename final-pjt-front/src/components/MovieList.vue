@@ -40,9 +40,10 @@ export default {
   // computed: {
   //   movies() {
   //     return this.$store.state.movies
-  //   }
+  //   } 
   // },
   created() {
+    this.$store.dispatch('getMovies')
     const num = this.num
     this.movies = this.movies.concat(this.$store.state.movies.slice(num, num+EACH_LEN))
     this.num += EACH_LEN
