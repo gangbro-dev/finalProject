@@ -21,9 +21,10 @@ export default {
     recommendMovie : Object,
   },
   computed: {
-    recommendmovie_poster () {
-      return `https://image.tmdb.org/t/p/original${this.recommendmovie.poster_path}`
-    }
+    recommendMovie_poster () {
+      return `https://image.tmdb.org/t/p/original${this.recommendMovie.poster_path}`
+    },
+    
   }
 }
 </script>

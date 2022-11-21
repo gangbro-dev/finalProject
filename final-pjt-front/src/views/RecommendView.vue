@@ -1,11 +1,16 @@
 <template>
   <div>
     <h1>Recommend</h1>
-    <RecommendDetail
-      v-for="recommendMovie in recommendMovies"
-      :key="recommendMovie.id"
-      :recommendMovie="recommendMovie"
-    />
+    <hr>
+    <div v-if="recommendMovies.length > idx">
+      <RecommendDetail
+        :recommendMovie="recommendMovie"
+      />
+      <button @click="nextMovie">다음</button>
+    </div>
+    <div v-else>
+      <p>대기열이 끝나버렷네요 ㅜ.ㅜ</p>
+    </div>
   </div>
 </template>
 
@@ -18,10 +23,17 @@ export default {
   data() {
     return {
       recommendMovies: [],
+      idx: 0,
+      // recommendMovie: null,
     }
   },
   components: {
     RecommendDetail,
+  },
+  computed: {
+    recommendMovie() {
+      return this.recommendMovies[this.idx]
+    }
   },
   methods: {
     getRecommend() {
@@ -39,7 +51,9 @@ export default {
         .catch((err) => {
           console.log(err)
         })
-
+    },
+    nextMovie() {
+      this.idx += 1
     }
   },
   created() {

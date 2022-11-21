@@ -1,10 +1,10 @@
 <template>
   <div id="app" >
-    <nav class="navbar navbar-expand-lg bg-light d-flex justify-content-between">
+    <nav class="nav navbar navbar-expand-lg bg-light d-flex justify-content-between">
       <span id='nav-menu'>
         <router-link :to="{ name : 'MovieView'}" >Movie</router-link> |
-        <router-link :to="{ name : 'CommunityView' }">Community</router-link> |
-        <router-link :to="{ name : 'RecommendView' }">Recommend</router-link> 
+        <router-link :to="{ name : 'CommunityView' }">Community </router-link>
+        <router-link v-if='isLogin' :to="{ name : 'RecommendView' }">| Recommend</router-link> 
       </span>
       <span id="nav-account" v-if='!isLogin'>
         <router-link  :to="{ name : 'SignUpView' }">SignUp</router-link> |
@@ -58,6 +58,7 @@ nav {
 nav a {
   font-weight: bold;
   color: #2c3e50;
+  text-decoration: none;
 }
 
 nav a.router-link-exact-active {

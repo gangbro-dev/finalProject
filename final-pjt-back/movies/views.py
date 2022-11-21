@@ -149,7 +149,7 @@ def 대표작이_디비에_있을까요_없을까요(video):
     except:
         request_url = f'https://api.themoviedb.org/3/movie/{video["id"]}?api_key={API_KEY}&language=ko-KR'
         res = requests.get(request_url).json()
-        print(res)
+        # print(res)
         credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
         actors = []
         for actor in credit['cast'][:5]:
@@ -227,7 +227,7 @@ def get_recommend_list(request):
                 break
         else: # 야 조건이 빡빡해 3개가 안뽑혀
             fav_genres = fav_genres[:-1]
-    pprint('1. done')
+    # pprint('1. done')
     # pprint(recommend_querySet)
     # 2. 배우별 추천
     cnt = 0
