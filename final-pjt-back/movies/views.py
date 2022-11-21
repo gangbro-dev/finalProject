@@ -129,6 +129,13 @@ def clickLikeButton(request, movie_id):
             return Response({'like': True}, status=status.HTTP_200_OK)
 
 
+@api_view(['GET',])
+def getLikeMovie(request, username):
+    data = User.objects.get(username=username).like_movies.all()
+    serializer = MovieSerializer(data, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 def 응애_대표작찾아줘(id, 요청횟수):
     request_url = f'https://api.themoviedb.org/3/person/{id}/movie_credits?api_key={API_KEY}&language=ko-KR'
     response = requests.get(request_url).json()['cast']
@@ -162,8 +169,8 @@ def 대표작이_디비에_있을까요_없을까요(video):
         movie.actors = json.dumps(actors)
         movie.director = director
         movie.save()
-        for j in res['genre_ids']:
-            movie.genre.add(Genre.objects.get(id=j))
+        for genre in res['genres']:
+            movie.genre.add(Genre.objects.get(id=genre['id']))
 
         return movie.pk
 
