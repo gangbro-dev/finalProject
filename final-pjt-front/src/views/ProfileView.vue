@@ -8,38 +8,24 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
-const API_URL = 'http://192.168.0.2:8000'
 
 export default {
   name: 'ProfileView',
   data() {
     return {
-      user : null,
+      is_follow: false,
     }
   },
-  methods: {
-    getUser() {
-      axios ({
-        method: 'get',
-        url: `${API_URL}/accounts/user`,
-        headers: {
-          Authorization: `Token ${this.$store.state.token}`
-        }
-      })
-        .then((res) => {
-          console.log(res)
-          this.user = res.data.username
-        })
-        . catch((err) => {
-          console.log(err)
-        })
-    }
+  computed: {
+    user() {
+      return this.$route.params.user_name
+    },
   },
-  created () {
-    this.getUser()
-  }
+  beforeMount() {
+    this.$store.dispatch('getUser')
+  },
 
 }
 </script>

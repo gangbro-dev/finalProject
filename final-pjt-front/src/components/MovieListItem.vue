@@ -2,7 +2,7 @@
   <div class='container'>
     <br>
     <router-link :to="{ name :'DetailView', params:{id: movie.id}  }  ">
-      <p>{{ movie.title }}</p>
+      <!-- <p>{{ movie.title }}</p> -->
       <img :src="movie_poster" alt="">
     </router-link>
     
@@ -27,6 +27,6 @@ export default {
 
 <style>
 img {
-  width : 30rem;
+  width : 12em;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>community</h1>
+    <h1>Community</h1>
     <router-link :to="{ name: 'CreateView'}">[create]</router-link>
     <CommunityList/>
   </div>

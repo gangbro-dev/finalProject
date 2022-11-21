@@ -44,8 +44,8 @@ methods: {
           Authorization: `Token ${this.$store.state.token}`
       },
     })
-      .then((res) => {
-        console.log(res)
+      .then(() => {
+        this.$router.push({name : 'CommunityView' })
       })
       .catch((err) => {
         console.log(err)

@@ -1,30 +1,45 @@
 <template>
-  <div id="app" class="container">
+  <div id="app" class='container'>
     <nav>
       <router-link :to="{ name : 'MovieView'}" >Movie</router-link> |
-      <router-link :to="{ name : 'SignUpView' }">SignUpPage</router-link> |
-      <router-link v-if='!isLogin' :to="{ name : 'LoginView' }">LoginPage</router-link>
+      <span v-if='!isLogin'>
+        <router-link  :to="{ name : 'SignUpView' }">SignUp</router-link> |
+        <router-link  :to="{ name : 'LoginView' }">Login</router-link>
+      </span>
       <a v-else type='button' class='logoutButton' @click='logout' >Logout</a> |
       <router-link :to="{ name : 'CommunityView' }">Community</router-link> |
-      <router-link :to="{ name : 'ProfileView'}">Profile</router-link>
-
+      <router-link :to="{ name : 'RecommendView' }">Recommend</router-link> 
+      <span v-if="isLogin">
+      |
+      <router-link :to="{ name : 'ProfileView', params: {user_name : user} }">Profile</router-link> 
+      </span>
     </nav>
     <router-view/>
   </div>
 </template>
 
 <script>
+
 export default {
   computed: {
     isLogin() {
       return this.$store.getters.isLogin
+    },
+    user() {
+      return this.$store.state.user.username
     }
+
   },
   methods: {
     logout() {
       this.$store.dispatch('logout')
-    }
+      this.$router.push({name : 'LoginView'})
+    },
+  },
+  beforeCreate() {
+    this.$store.dispatch('getUser')
   }
+  
 }
 </script>
 
