@@ -1,13 +1,24 @@
 <template>
   <div v-if='article'>
-    <p>글 번호 : {{ article?.id }}</p>
-    <p>제목 : {{ article?.title }} </p>
-    <router-link :to="{ name :'ProfileView', params:{user_name : article.user.username} }">작성자 : {{ article?.user.username }}</router-link>
-    <p>내용 : {{ article?.content }}</p>
-    <p>작성시간 : {{ article?.created_at }}</p>
-    <p>수정시간 : {{ article?.updated_at }}</p>
-    <button @click="deleteArticle">XXX</button>
-    <router-link :to="{ name: 'UpdateView', params: {article: article, article_id: article.id} }">[edit]</router-link>
+    <div class="d-flex justify-content-end ">
+      <router-link :to="{ name: 'UpdateView', params: {article: article, article_id: article.id} }"><button>EDIT</button></router-link>
+      <button @click="deleteArticle">DELETE</button>
+    </div>
+    <div class="d-flex justify-content-between align-items-center p-3" style="background-color:cornsilk;">
+      <div class="d-flex align-items-center">
+        <div style="width:100px">{{ article?.id }}</div>
+        <div>{{ article?.title }}</div>
+      </div>
+      <div>{{ article?.updated_at | date}}</div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <router-link :to="{ name :'ProfileView', params:{user_name : article.user.username} }">작성자 : {{ article?.user.username }}</router-link>
+    </div>
+    <p style="min-height: 30rem;" class="mx-4">{{ article?.content }}</p>
+    <router-link :to="{ name: 'CommunityView' }" class="">
+      <button>뒤로</button>
+    </router-link>
+    <hr>
     <CommunityDetailCommentsList
       :article="article"
     />
@@ -59,7 +70,12 @@ export default {
   },
   created() {
     this.getArticleDetail()
-  }
+  },
+  filters: {
+    date(data) {
+      return data.substr(0, 10)
+    }
+  },
 }
 </script>
 

@@ -81,7 +81,6 @@ export default new Vuex.Store({
       })
         .then((res) => {
           context.commit('SAVE_TOKEN', res.data.key)
-          router.push({ name: 'MovieView' })
         })
         .catch((err) => {
           console.log(err)
@@ -100,7 +99,6 @@ export default new Vuex.Store({
         .then((res) => {
           context.commit('SAVE_TOKEN', res.data.key)
           context.dispatch('getUser')
-          router.push({ name: 'MovieView' })
         })
     },
     // 로그아웃
@@ -115,7 +113,6 @@ export default new Vuex.Store({
       })
         .then((res) => {
           context.commit('GET_ARTICLES', res.data)
-          router.push({ name: 'MovieView' })
         })
         .catch((err) => {
           console.log(err)

@@ -29,7 +29,6 @@ export default {
     date(data) {
       return data.substr(0, 10)
     }
-
   }
 }
 </script>

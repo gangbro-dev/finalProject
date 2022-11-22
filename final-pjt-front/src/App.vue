@@ -37,6 +37,9 @@ export default {
   },
   beforeCreate() {
     this.$store.dispatch('getUser')
+  },
+  mounted () {
+    this.$router.push({ name: 'MovieView' })
   }
   
 }

@@ -1,9 +1,13 @@
 <template>
-  <div v-if="!is_editing">
-    {{ comment.user.username }} :
-    {{ comment.content}}
-    <button @click="changeToForm">Edit</button>
-    <button @click="deleteComment">X</button>
+  <div v-if="!is_editing" class="d-flex justify-content-between">
+    <div>
+      {{ comment.user.username }} :
+      {{ comment.content}}
+    </div>
+    <div>
+      <button @click="changeToForm">Edit</button>
+      <button @click="deleteComment">X</button>
+    </div>
   </div>
   <div v-else>
     <form @submit.prevent='updateComment'>
@@ -72,7 +76,7 @@ export default {
         console.log(err)
       })
     }
-  }
+  },
 }
 </script>
 

@@ -1,12 +1,15 @@
 <template>
   <div>
-    <h1>Recommend</h1>
+    <div class="d-flex justify-content-between">
+      <h1>Recommend</h1>
+      <button @click="nextMovie">다음</button>
+    </div>
     <hr>
     <div v-if="recommendMovies.length > idx">
       <DetailMovie
         :movie="recommendMovie"
       />
-      <button @click="nextMovie">다음</button>
+      
     </div>
     <div v-else>
       <p>대기열이 끝나버렷네요 ㅜ.ㅜ</p>
