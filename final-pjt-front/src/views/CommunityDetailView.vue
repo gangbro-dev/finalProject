@@ -1,8 +1,8 @@
 <template>
   <div v-if='article'>
     <div class="d-flex justify-content-end ">
-      <router-link :to="{ name: 'UpdateView', params: {article: article, article_id: article.id} }"><button>EDIT</button></router-link>
-      <button @click="deleteArticle">DELETE</button>
+      <router-link :to="{ name: 'UpdateView', params: {article: article, article_id: article.id} }"><button class="btn btn-dark ms-2">EDIT</button></router-link>
+      <button @click="deleteArticle" class="btn btn-danger ms-2">DELETE</button>
     </div>
     <div class="d-flex justify-content-between align-items-center p-3" style="background-color:cornsilk;">
       <div class="d-flex align-items-center">
@@ -16,7 +16,7 @@
     </div>
     <p style="min-height: 30rem;" class="mx-4">{{ article?.content }}</p>
     <router-link :to="{ name: 'CommunityView' }" class="">
-      <button>뒤로</button>
+      <button class="btn btn-dark">뒤로</button>
     </router-link>
     <hr>
     <CommunityDetailCommentsList

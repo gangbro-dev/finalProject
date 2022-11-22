@@ -9,7 +9,7 @@
       <span id="nav-account" v-if='!isLogin'>
         <router-link  :to="{ name : 'SignUpView' }">SignUp</router-link> |
         <!-- <router-link  :to="{ name : 'LoginView' }">Login</router-link> -->
-        <b-button v-b-toggle.sidebar-right>Log In</b-button>
+        <b-div v-b-toggle.sidebar-right>Log In</b-div>
         <b-sidebar id="sidebar-right" title="" right shadow>
           <div class="px-3 py-2">
             <LoginView/>
@@ -99,5 +99,10 @@ nav a.router-link-exact-active {
 } 
 div {
   font-family: IBMPlexSansKR-Regular;
+}
+b-div {
+  font-weight: bold;
+  color: #2c3e50;
+  text-decoration: none;
 }
 </style>

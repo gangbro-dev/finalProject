@@ -6,7 +6,7 @@
       <input type="text" id='title' v-model.trim='title'><br>
       <label for="content">내용 : </label>
       <textarea id="content" cols="30" rows="10" v-model.trim='content'></textarea>
-      <input type="submit" id="submit">
+      <input type="submit" id="submit" class="btn btn-dark btn-sm">
     </form>
   </div>
 </template>

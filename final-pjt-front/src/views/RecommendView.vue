@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-content-between">
       <h1>Recommend</h1>
-      <button @click="nextMovie">다음</button>
+      <button @click="nextMovie" class="btn btn-dark btn-sm">다음</button>
     </div>
     <hr>
     <div v-if="recommendMovies.length > idx">

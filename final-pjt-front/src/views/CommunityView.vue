@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Community</h1>
-    <router-link :to="{ name: 'CreateView'}">[create]</router-link>
+    <router-link :to="{ name: 'CreateView'}"><button class="btn btn-dark">CREATE</button></router-link>
     <CommunityList/>
   </div>
 </template>

@@ -5,15 +5,15 @@
       {{ comment.content}}
     </div>
     <div>
-      <button @click="changeToForm">Edit</button>
-      <button @click="deleteComment">X</button>
+      <button @click="changeToForm" class="btn btn-dark btn-sm" >Edit</button>
+      <button @click="deleteComment" class="btn btn-danger btn-sm">X</button>
     </div>
   </div>
   <div v-else>
     <form @submit.prevent='updateComment'>
       <input type="text" v-model='input'>
-      <button type="submit">확인</button>
-      <button @click='canclingEdit'>취소</button>
+      <button type="submit" class="btn btn-dark btn-sm">확인</button>
+      <button @click='canclingEdit' class="btn btn-dark btn-sm">취소</button>
     </form>
   </div>
 </template>

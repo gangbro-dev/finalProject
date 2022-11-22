@@ -5,7 +5,7 @@
         type="text"
         v-model='comment'
       >
-      <button type="submit">확인</button>
+      <button type="submit" class="btn btn-dark btn-sm">확인</button>
     </form>
   </div>
 </template>
