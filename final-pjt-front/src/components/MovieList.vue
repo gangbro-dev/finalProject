@@ -1,13 +1,13 @@
 <template>
 <div>
-  <div class='d-flex flex-wrap'>
+  <div class='d-flex flex-wrap justify-content-center'>
     <div v-for="(movie, rowIndex) in movies" :key="rowIndex">
       <!-- <MovieListItem
         v-for='movie in movies'
         :key='movie.id'
         :movie='movie'
       /> -->
-      <MovieListItem :movie='movie'/>
+      <MovieListItem :movie='movie' class="mx-2"/>
     </div>
   </div>
     <br>

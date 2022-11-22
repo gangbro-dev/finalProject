@@ -35,9 +35,6 @@ export default {
 </script>
 
 <style>
-hr {
-  margin: 0px !important;
-}
 .communutySpan {
   text-decoration: none ;
   text-decoration-style: bold;

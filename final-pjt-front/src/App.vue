@@ -1,5 +1,5 @@
 <template>
-  <div id="app" >
+  <div id="app container" >
     <nav class="nav navbar navbar-expand-lg bg-light d-flex justify-content-between">
       <span id='nav-menu'>
         <router-link :to="{ name : 'MovieView'}" >Movie</router-link> |

@@ -1,5 +1,5 @@
 <template>
-  <div class='container'>
+  <div>
     <br>
     <router-link :to="{ name :'DetailView', params:{id: movie.id}  }  ">
       <!-- <p>{{ movie.title }}</p> -->

@@ -6,14 +6,14 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.0.2:8000'
+const API_URL = 'http://192.168.202.105:8000'
 
 export default new Vuex.Store({
   plugins: [
     createPersistedState()
   ],
   state: {
-    movies: null,
+    movies: [],
     articles: [],
     token: null,
     API_URL : API_URL,
@@ -81,6 +81,7 @@ export default new Vuex.Store({
       })
         .then((res) => {
           context.commit('SAVE_TOKEN', res.data.key)
+          router.push({ name: 'MovieView' })
         })
         .catch((err) => {
           console.log(err)
@@ -99,6 +100,7 @@ export default new Vuex.Store({
         .then((res) => {
           context.commit('SAVE_TOKEN', res.data.key)
           context.dispatch('getUser')
+          router.push({ name: 'MovieView' })
         })
     },
     // 로그아웃
@@ -113,6 +115,7 @@ export default new Vuex.Store({
       })
         .then((res) => {
           context.commit('GET_ARTICLES', res.data)
+          router.push({ name: 'MovieView' })
         })
         .catch((err) => {
           console.log(err)

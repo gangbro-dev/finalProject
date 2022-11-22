@@ -1,11 +1,8 @@
 <template>
   <div v-if="movie">
-    <h1>Detail</h1>
     <DetailMovie
       :movie="movie"/>
     <DetailCommentsList
-      :movie="movie"/>
-    <DetailVideo
       :movie="movie"/>
   </div>
 </template>
@@ -20,14 +17,12 @@ import axios from 'axios'
 
 import DetailMovie from '@/components/DetailMovie'
 import DetailCommentsList from '@/components/DetailCommentsList'
-import DetailVideo from '@/components/DetailVideo'
 
 export default {
   name: "DetailView",
   components: {
     DetailMovie,
     DetailCommentsList,
-    DetailVideo,
   },
   data() {
     return {

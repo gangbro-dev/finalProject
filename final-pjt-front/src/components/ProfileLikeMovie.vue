@@ -1,5 +1,5 @@
 <template>
-  <div class='container'>
+  <div>
     <img :src="likemovie_poster" alt="">
   </div>
 </template>

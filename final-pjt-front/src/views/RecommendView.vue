@@ -3,8 +3,8 @@
     <h1>Recommend</h1>
     <hr>
     <div v-if="recommendMovies.length > idx">
-      <RecommendDetail
-        :recommendMovie="recommendMovie"
+      <DetailMovie
+        :movie="recommendMovie"
       />
       <button @click="nextMovie">다음</button>
     </div>
@@ -16,7 +16,7 @@
 
 <script>
 import axios from 'axios'
-import RecommendDetail from "@/components/RecommendDetail"
+import DetailMovie from "@/components/DetailMovie"
 
 export default {
   name: "RecommendView",
@@ -24,11 +24,10 @@ export default {
     return {
       recommendMovies: [],
       idx: 0,
-      // recommendMovie: null,
     }
   },
   components: {
-    RecommendDetail,
+    DetailMovie,
   },
   computed: {
     recommendMovie() {
@@ -58,7 +57,7 @@ export default {
   },
   created() {
     this.getRecommend()
-  }
+  },
 }
 </script>
 
