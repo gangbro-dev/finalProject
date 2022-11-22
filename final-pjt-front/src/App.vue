@@ -8,7 +8,13 @@
       </span>
       <span id="nav-account" v-if='!isLogin'>
         <router-link  :to="{ name : 'SignUpView' }">SignUp</router-link> |
-        <router-link  :to="{ name : 'LoginView' }">Login</router-link>
+        <!-- <router-link  :to="{ name : 'LoginView' }">Login</router-link> -->
+        <b-button v-b-toggle.sidebar-right>Log In</b-button>
+        <b-sidebar id="sidebar-right" title="" right shadow>
+          <div class="px-3 py-2">
+            <LoginView/>
+          </div>
+        </b-sidebar>
       </span>
       <span id="nav-account" v-else>
         <router-link :to="{ name : 'ProfileView', params: {user_name : user} }">Profile</router-link> |
@@ -20,8 +26,12 @@
 </template>
 
 <script>
+import LoginView from '@/views/LoginView'
 
 export default {
+  components: {
+    LoginView
+  },
   computed: {
     isLogin() {
       return this.$store.getters.isLogin
@@ -46,12 +56,24 @@ export default {
 </script>
 
 <style>
+@font-face {
+    font-family: 'IBMPlexSansKR-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: IBMPlexSansKR-Regular, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+;
+}
+
+div a {
+  color: #2c3e50;
+  text-decoration: none;
 }
 
 nav {
@@ -74,5 +96,8 @@ nav a.router-link-exact-active {
 
 #nav-account {
   margin: 0px 2rem 0px;
+} 
+div {
+  font-family: IBMPlexSansKR-Regular;
 }
 </style>

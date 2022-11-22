@@ -1,6 +1,8 @@
 <template>
   <div>
-    <img :src="likemovie_poster" alt="">
+    <router-link :to="{ name :'DetailView', params:{id: likeMovie.id}  }">
+      <img :src="likemovie_poster" alt="">
+    </router-link>
   </div>
 </template>
 

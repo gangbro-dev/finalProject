@@ -30,13 +30,14 @@ export default new Vuex.Store({
       state.movies = movies
     },
     SAVE_TOKEN(state, token) {
+      console.log('로그인 성공')
       state.token = token
       router.push({ name: 'MovieView' })
     },
     LOGOUT(state) {
       state.token = null
       localStorage.removeItem('user')
-      router.push({name : 'LoginView'})
+      router.push({name : 'MovieView'})
     },
     GET_ARTICLES(state, articles) {
       state.articles = articles
@@ -88,6 +89,7 @@ export default new Vuex.Store({
     },
     // 로그인
     login(context, payload) {
+      console.log('로그인 시작')
       axios({
         method: "post",
         url: `${API_URL}/accounts/login/`,
@@ -97,8 +99,13 @@ export default new Vuex.Store({
         }
       })
         .then((res) => {
+          console.log('로그인 요청 성공')
           context.commit('SAVE_TOKEN', res.data.key)
           context.dispatch('getUser')
+        }).catch((err) => {
+          console.log('로그인 실패')
+          console.log(payload)
+          console.log(err)
         })
     },
     // 로그아웃

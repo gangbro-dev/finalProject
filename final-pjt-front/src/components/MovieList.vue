@@ -2,12 +2,9 @@
 <div>
   <div class='d-flex flex-wrap justify-content-center'>
     <div v-for="(movie, rowIndex) in movies" :key="rowIndex">
-      <!-- <MovieListItem
-        v-for='movie in movies'
-        :key='movie.id'
-        :movie='movie'
-      /> -->
-      <MovieListItem :movie='movie' class="mx-2"/>
+      <MovieListItem 
+      :movie='movie' 
+      class="m-2"/>
     </div>
   </div>
     <br>
@@ -66,11 +63,10 @@ export default {
           $state.complete()
         }
       }, 1000)
-    }
+    },
   }
 }
 </script>
 
 <style>
-
 </style>
