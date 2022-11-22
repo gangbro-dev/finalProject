@@ -18,53 +18,59 @@ API_KEY = '550af897681babc49f34957fa75cbee8'
 # Create your views here.
 
 
-# def dbInitialize():
-#     PAGE_NUM = 100
-#     for gen in requests.get(f'https://api.themoviedb.org/3/genre/movie/list?api_key={API_KEY}&language=ko-KR').json()['genres']:
-#         genre = Genre()
-#         genre.id = gen['id']
-#         genre.name = gen['name']
-#         genre.save()
-#     print('get genre finished')
-#     print(f'get movie startd (1 to {PAGE_NUM})')
-#     for idx in range(1, PAGE_NUM + 1):
-#         url = f'https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}&language=ko-KR&page={idx}&region=kr'
-#         response = requests.get(url).json()['results']
-#         for res in response:
-#             credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
-#             actors = []
-#             for actor in credit['cast'][:5]:
-#                 actors.append({'name': actor['name'], 'id': actor['id']})
-#             for crew in credit['crew']:
-#                 if crew['job'] == 'Director':
-#                     director = crew['name']
-#             movie = Movie()
-#             movie.title = res['title']
-#             movie.overview = res['overview']
-#             movie.rate = int(res['vote_average'] * 10)
-#             movie.popularity = res['popularity'] * 1000
-#             movie.release_date = datetime.datetime.strptime(res['release_date'], '%Y-%m-%d').date()
-#             movie.poster_path = res['poster_path']
-#             movie.tmdb_id = res['id']
-#             movie.trailer = 'None'
-#             movie.actors = json.dumps(actors)
-#             movie.director = director
-#             movie.save()
-#             for j in res['genre_ids']:
-#                 movie.genre.add(Genre.objects.get(id=j))
-#         print(f'{idx}/{PAGE_NUM}')
-#     print('get movie finished')
+def dbInitialize():
+    PAGE_NUM = 100
+    for gen in requests.get(f'https://api.themoviedb.org/3/genre/movie/list?api_key={API_KEY}&language=ko-KR').json()['genres']:
+        genre = Genre()
+        genre.id = gen['id']
+        genre.name = gen['name']
+        genre.save()
+    print('get genre finished')
+    print(f'get movie startd')
+    for idx in range(1, PAGE_NUM + 1):
+        url = f'https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}&language=ko-KR&page={idx}&region=kr'
+        response = requests.get(url).json()['results']
+        for res in response:
+            credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
+            actors = []
+            for actor in credit['cast'][:5]:
+                actors.append({'name': actor['name'], 'id': actor['id']})
+            for crew in credit['crew']:
+                if crew['job'] == 'Director':
+                    director = crew['name']
+            trailer = 'No_Trailer'
+            trailer_url = f'https://api.themoviedb.org/3/movie/{res["id"]}/videos?api_key={API_KEY}&language=ko-KR'
+            for video in requests.get(trailer_url).json()['results']:
+                if video['type'] == "Trailer":
+                    trailer = video["key"]
+                    break
+            movie = Movie()
+            movie.title = res['title']
+            movie.overview = res['overview']
+            movie.rate = int(res['vote_average'] * 10)
+            movie.popularity = res['popularity'] * 1000
+            movie.release_date = datetime.datetime.strptime(res['release_date'], '%Y-%m-%d').date()
+            movie.poster_path = res['poster_path']
+            movie.tmdb_id = res['id']
+            movie.trailer = trailer
+            movie.actors = json.dumps(actors)
+            movie.director = director
+            movie.save()
+            for j in res['genre_ids']:
+                movie.genre.add(Genre.objects.get(id=j))
+        print(f'{idx}/{PAGE_NUM}')
+    print('get movie finished')
             
-#     return 
+    return 
 
 
-# try:
-#     if Movie.objects.all().count():
-#         print('start API')
-#         dbInitialize()
-#         print('end API')
-# except:
-#     print('migrate first')
+try:
+    if Movie.objects.all().count() < 2000:
+        print('start API')
+        dbInitialize()
+        print('end API')
+except:
+    print('migrate first')
 
 
 @api_view(["GET",])
@@ -154,6 +160,7 @@ def 대표작이_디비에_있을까요_없을까요(video):
         actors = []
         for actor in credit['cast'][:5]:
             actors.append({'name': actor['name'], 'id': actor['id']})
+        director = 'not Found'
         for crew in credit['crew']:
             if crew['job'] == 'Director':
                 director = crew['name']
