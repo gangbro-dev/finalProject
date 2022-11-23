@@ -170,7 +170,7 @@ def 대표작이_디비에_있을까요_없을까요(video):
     except:
         request_url = f'https://api.themoviedb.org/3/movie/{video["id"]}?api_key={API_KEY}&language=ko-KR'
         res = requests.get(request_url).json()
-        # print(res)
+        print('db 추가 영화 생성')
         credit = requests.get(f'https://api.themoviedb.org/3/movie/{res["id"]}/credits?api_key={API_KEY}&language=ko-KR').json()
         actors = []
         for actor in credit['cast'][:5]:
@@ -202,82 +202,86 @@ def get_recommend_list(request):
     recommended_list = list()
     for movie in request.data['recommended']['movies']:
         recommended_list.append(movie['id'])
-    like_actors_count = dict()
-    genre_count = dict()
-    for like_movie in like_movie_list:
-        # 좋아하는 장르 추출
-        for like_genre in like_movie.genre.all():
-            if like_genre.name in genre_count.keys():
-                genre_count[like_genre.name] += 1
-            else:
-                genre_count[like_genre.name] = 1
-        # 좋아하는 배우 추출(우선 간판 1명만 써보자)
-        for like_actor_object in json.loads(like_movie.actors):
-            like_actor = like_actor_object['id']
-            if like_actor in like_actors_count.keys():
-                like_actors_count[like_actor] += 1
-            else:
-                like_actors_count[like_actor] = 1
-        # 확인한 영화 추천안함목록에 추가
-        recommended_list.append(like_movie.pk)
-    genre_count = sorted(genre_count.items(), key=lambda x: x[1])
-    like_actors_count = sorted(like_actors_count.items(), key=lambda x: x[1])
-    
-    recommend_querySet = Movie.objects.none()
-    # -------------- 추천 알고리즘 어케 뽑지 --------------------------
-    # 목표: 추천 대기열 N개 만들기
-    # 일단, 가장 좋아하는 장르를 찾자(여러개 일 수 도 있다! 왜냐 좋아요 표시한 영화가 액션 5개 로멘스 5개 일 수 있음)
-    # 그러므로 우선 vue에서 좋아하는 장르를 선택하게 할 것 (request.data.fav_genre)에 넣어두자(이름으로)
-    # 근데? 너무 많은 장르를 선택하면 영화가 하나도 없을 수 가 있다(최대 3개)
-    # 그럼 그 장르의 영화들을 뽑자 어떻게? and연산으로 어디서? 밑에서 (1.)
-    # 여기서 5개 보여줌
-    # 이제 배우 기반으로 영화 찾아보자 (2.)
-    # --------------------------------------------------------------
-    # 1. 장르별 추천
-    # fav_genres = ['액션']
-    fav_genres = list()
-    while genre_count:
-        fav_genres.append(genre_count.pop()[0])
-    cnt = 0
-    for fav_genres_set in combinations(fav_genres, 3):
-        rst = Movie.objects.all()
-        for fav_genre in fav_genres_set:
-            rst = rst.filter(Q(genre=Genre.objects.get(name=fav_genre)))
-        for movie in rst:
-            if movie.id not in recommended_list and movie.rate > 60 and movie.overview:
-                recommend_querySet = recommend_querySet.union(Movie.objects.filter(pk=movie.id))
-                recommended_list.append(movie.id)
-                cnt += 1
-            if (cnt >= 5):
-                break
-    # pprint('1. done')
-    # pprint(recommend_querySet)
-    # 2. 배우별 추천
-    pprint(like_actors_count)
-    cnt = 0
-    while (cnt < 3) & bool(fav_genres):
-        if like_actors_count:
-            best_actor = like_actors_count.pop()[0]
-        else:
-            break
-        idx = 1
-        while True:
-            cast_data = 응애_대표작찾아줘(best_actor, idx)
-            if not cast_data:
-                break
-            movie_pk = 대표작이_디비에_있을까요_없을까요(cast_data)
-            movie = Movie.objects.get(pk=movie_pk)
-            if movie.id not in recommended_list and movie.rate > 60 and movie.overview:
+    if like_movie_list:
+        like_actors_count = dict()
+        genre_count = dict()
+        for like_movie in like_movie_list:
+            # 좋아하는 장르 추출
+            for like_genre in like_movie.genre.all():
+                if like_genre.name in genre_count.keys():
+                    genre_count[like_genre.name] += 1
+                else:
+                    genre_count[like_genre.name] = 1
+            # 좋아하는 배우 추출(우선 간판 1명만 써보자)
+            for like_actor_object in json.loads(like_movie.actors):
+                like_actor = like_actor_object['id']
+                if like_actor in like_actors_count.keys():
+                    like_actors_count[like_actor] += 1
+                else:
+                    like_actors_count[like_actor] = 1
+            # 확인한 영화 추천안함목록에 추가
+            recommended_list.append(like_movie.pk)
+        genre_count = sorted(genre_count.items(), key=lambda x: x[1])
+        like_actors_count = sorted(like_actors_count.items(), key=lambda x: x[1])
+        
+        recommend_querySet = Movie.objects.none()
+        # -------------- 추천 알고리즘 어케 뽑지 --------------------------
+        # 목표: 추천 대기열 N개 만들기
+        # 일단, 가장 좋아하는 장르를 찾자(여러개 일 수 도 있다! 왜냐 좋아요 표시한 영화가 액션 5개 로멘스 5개 일 수 있음)
+        # 그러므로 우선 vue에서 좋아하는 장르를 선택하게 할 것 (request.data.fav_genre)에 넣어두자(이름으로)
+        # 근데? 너무 많은 장르를 선택하면 영화가 하나도 없을 수 가 있다(최대 3개)
+        # 그럼 그 장르의 영화들을 뽑자 어떻게? and연산으로 어디서? 밑에서 (1.)
+        # 여기서 5개 보여줌
+        # 이제 배우 기반으로 영화 찾아보자 (2.)
+        # --------------------------------------------------------------
+        # 1. 장르별 추천
+        # fav_genres = ['액션']
+        fav_genres = list()
+        while genre_count:
+            fav_genres.append(genre_count.pop()[0])
+        cnt = 0
+        for fav_genres_set in combinations(fav_genres, 3):
+            rst = Movie.objects.all()
+            for fav_genre in fav_genres_set:
+                rst = rst.filter(Q(genre=Genre.objects.get(name=fav_genre)))
+            for movie in rst:
+                if movie.id not in recommended_list and movie.rate > 60 and movie.overview:
                     recommend_querySet = recommend_querySet.union(Movie.objects.filter(pk=movie.id))
                     recommended_list.append(movie.id)
                     cnt += 1
-                    print('추가햇지롱')
+                if (cnt >= 5):
                     break
+        # pprint('1. done')
+        # pprint(recommend_querySet)
+        # 2. 배우별 추천
+        pprint(like_actors_count)
+        cnt = 0
+        while (cnt < 3) & bool(fav_genres):
+            if like_actors_count:
+                best_actor = like_actors_count.pop()[0]
             else:
-                # print('못추가햇지롱')
-                idx += 1
-        if (cnt >= 5):
-            break
-    # print(recommend_querySet)
+                break
+            idx = 1
+            while True:
+                cast_data = 응애_대표작찾아줘(best_actor, idx)
+                if not cast_data:
+                    break
+                movie_pk = 대표작이_디비에_있을까요_없을까요(cast_data)
+                movie = Movie.objects.get(pk=movie_pk)
+                if movie.id not in recommended_list and movie.rate > 60 and movie.overview:
+                        recommend_querySet = recommend_querySet.union(Movie.objects.filter(pk=movie.id))
+                        recommended_list.append(movie.id)
+                        cnt += 1
+                        print('추가햇지롱')
+                        break
+                else:
+                    # print('못추가햇지롱')
+                    idx += 1
+            if (cnt >= 5):
+                break
+        # print(recommend_querySet)
+    else:
+        cnt = len(recommended_list)
+        recommend_querySet = Movie.objects.all()[cnt:cnt + 8]
     result = MovieSerializer(recommend_querySet, many=True)
     return Response(result.data, status=status.HTTP_200_OK)
