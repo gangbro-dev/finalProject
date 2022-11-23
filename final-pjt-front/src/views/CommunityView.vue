@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-content-between">
       <h1>Community</h1>
-      <router-link :to="{ name: 'CreateView'}"><button class="btn btn-dark">CREATE</button></router-link>
+      <router-link :to="{ name: 'CreateView'}"><button class="btn btn-dark">글쓰기</button></router-link>
     </div>
     <CommunityList/>
   </div>

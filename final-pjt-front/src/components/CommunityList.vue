@@ -14,7 +14,7 @@
   </div>
   <hr>
   <CommunityListItem
-  v-for="article in articles"
+  v-for="article in articles.slice().reverse()"
   :key="article.id"
   :article="article"/>
 </div>
