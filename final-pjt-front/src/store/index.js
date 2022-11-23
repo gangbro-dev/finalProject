@@ -6,7 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.202.105:8000'
+const API_URL = 'http://192.168.0.2:8000'
 
 export default new Vuex.Store({
   plugins: [
@@ -20,6 +20,7 @@ export default new Vuex.Store({
     user: null,
     likeMovies: [],
     err_message: [],
+    imgData: null,
   },
   getters: {
     isLogin(state) {
@@ -48,6 +49,7 @@ export default new Vuex.Store({
     },
     GET_USER(state, user) {
       state.user = user
+      console.log('유저 정보 가져오기 완료')
     },
     GET_LIKE_MOVIE(state, likeMovies) {
       state.likeMovies = likeMovies
@@ -59,6 +61,9 @@ export default new Vuex.Store({
       }
       state.err_message = error_message
     },
+    GET_IMG(state, imgData) {
+      state.imgData = encodeURI(imgData)
+    }
   },
   actions: {
     // 영화 정보 가져오기
@@ -149,6 +154,7 @@ export default new Vuex.Store({
         })
         .then((res) => {
           context.commit('GET_USER', res.data)
+          context.dispatch('getImg')
         })
         .catch((err) => {
           console.log(err)
@@ -171,6 +177,20 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
+    getImg(context) {
+      const headers = {
+        'Authorization': `Token ${context.state.token}`,
+      }
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/accounts/image/`,
+        headers: headers
+      })
+        .then((res) => {
+          console.log(res.data)
+          context.commit("GET_IMG", res.data)
+        })
+    }
   },
   modules: {
   }
