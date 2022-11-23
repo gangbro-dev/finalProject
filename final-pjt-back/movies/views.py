@@ -95,7 +95,7 @@ def getMovieDetail(request, movie_id):
     return Response(status=status.HTTP_200_OK)
 
 
-@api_view(['GET', 'POST', 'DELETE'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def comments(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
     if request.method == "GET":
@@ -109,6 +109,14 @@ def comments(request, movie_id):
         comment.content = request.data['comment']
         comment.save()
         return Response(status=status.HTTP_201_CREATED)
+    elif request.method == 'PUT':
+        comment = Comment.objects.get(pk=request.data['commentId'])
+        if request.user == comment.user:
+            comment.content = request.data['comment']
+            comment.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else: 
+            return Response(status=status.HTTP_403_FORBIDDEN)
     elif request.method == 'DELETE':
         comment = Comment.objects.get(pk=request.data['commentId'])
         if request.user == comment.user:
