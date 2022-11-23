@@ -9,10 +9,12 @@
       <DetailMovie
         :movie="recommendMovie"
       />
-      
     </div>
-    <div v-else>
-      <p>대기열이 끝나버렷네요 ㅜ.ㅜ</p>
+    <div v-else class="d-flex justify-content-center align-items-center">
+      <button class="btn btn-dark btn-sm">
+        <h1>대기열을 불러오는 중입니다.</h1>
+      </button>
+      <p>{{ recommendMovie }}</p>
     </div>
   </div>
 </template>
@@ -34,32 +36,41 @@ export default {
   },
   computed: {
     recommendMovie() {
-      return this.recommendMovies[this.idx]
+      const movieNow = this.recommendMovies[this.idx]
+      if (movieNow) return this.recommendMovies[this.idx]
+      else this.getRecommend()
+      return null
     }
   },
   methods: {
     getRecommend() {
+      console.log('대기열 불러오기 시작')
+      const recommended = {
+        movies: this.recommendMovies,
+      }
+      console.log(recommended)
       axios({
-        method: 'get',
+        method: 'post',
         url: `${this.$store.state.API_URL}/api/v1/movies/recommend/`,
         headers: {
           Authorization: `Token ${this.$store.state.token}`
+        },
+        data: {
+          recommended
         }
       })
         .then((res) => {
-          this.recommendMovies = res.data
-          console.log(res)
+          console.log('대기열 불러오기 완료')
+          this.recommendMovies = [...this.recommendMovies,  ...res.data]
+          
         })
         .catch((err) => {
           console.log(err)
         })
     },
     nextMovie() {
-      this.idx += 1
+      if (this.recommendMovie) this.idx += 1
     }
-  },
-  created() {
-    this.getRecommend()
   },
 }
 </script>

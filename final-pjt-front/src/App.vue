@@ -21,7 +21,7 @@
         <a type='button' class='logoutButton' @click='logout' >Logout</a> 
       </span>
     </nav>
-    <router-view class='container'/>
+    <router-view class='container' style="width: 100%; height: 100%;"/>
   </div>
 </template>
 
@@ -62,15 +62,25 @@ export default {
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+    font-family: 'ONE-Mobile-POP';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 #app {
   font-family: IBMPlexSansKR-Regular, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-;
 }
-
+h1, h2, h3, h4, h5 {
+  font-family: ONE-Mobile-POP;
+}
+.container {
+  margin-top: 1.5rem;
+}
 div a {
   color: #2c3e50;
   text-decoration: none;
