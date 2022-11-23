@@ -16,17 +16,23 @@
           <input type="password" id='password2' v-model='password2'>
         </div>
         <ul class="footer-button-plus">
-          <input ref="profileImage" type="file" label="이미지 제출" style="width: 400px; margin-left: 100px;"
-              @change="onImageChange"/>
+          <input 
+            ref="profileImage" 
+            type="file" 
+            :name="username"
+            accept=".jpg, .jpeg, .png" 
+            label="이미지 제출" 
+            style="width: 400px;"/>
         </ul>
         <div class="d-flex justify-content-end align-items-center my-2" style="width: 100%;">
           <input type="submit" value='확인' class="btn btn-dark btn-sm" >
         </div>
       </form>
       <ul>
-        <li v-for="message, index in messages"
+        <li v-for="(message, index) in messages"
         :key="index">{{ message }}</li>
       </ul>
+      <!-- <button @click="onImageChange">테스트</button> -->
     </div>
   </div>
 </template>
@@ -39,7 +45,7 @@ export default {
       username: null,
       password1: null,
       password2: null,
-      uploadimage: '',
+      profileImage: null,
     }
   },
   computed: {
@@ -52,8 +58,9 @@ export default {
       const username = this.username
       const password1 = this.password1
       const password2 = this.password2
-      const profile_image = this.uploadimageurl
-
+      this.getImage()
+      const profile_image = this.profileImage
+      
       const payload = {
         username: username,
         password1: password1,
@@ -62,9 +69,9 @@ export default {
       }
       this.$store.dispatch('signUp',payload)
     },
-    onImageChange() {
-      this.uploadimage = this.$refs.profileImage.files
-      console.log(this.uploadimage)
+    getImage() {
+      this.profileImage = this.$refs.profileImage.files[0]
+      console.log(this.profileImage)
     }
   }
 }
