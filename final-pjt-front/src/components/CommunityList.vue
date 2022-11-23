@@ -1,12 +1,13 @@
 <template>
 <div>
   <div class="d-flex justify-content-between">
-    <div>제목</div>
+    <div class= "mx-4">No</div>
+    <div >제목</div>
     <div>
-      <span class="mx-3">
-        작성자
+      <span class="me-5">
+        작성자  
       </span> 
-      <span class="mx-3">
+      <span class="mx-4">
         작성 시간
       </span> 
     </div>
@@ -36,5 +37,6 @@ export default {
 </script>
 
 <style>
+
 
 </style>

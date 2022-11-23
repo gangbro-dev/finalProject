@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h1>Community</h1>
-    <router-link :to="{ name: 'CreateView'}"><button class="btn btn-dark">CREATE</button></router-link>
+    <div class="d-flex justify-content-between">
+      <h1>Community</h1>
+      <router-link :to="{ name: 'CreateView'}"><button class="btn btn-dark">CREATE</button></router-link>
+    </div>
     <CommunityList/>
   </div>
 </template>
