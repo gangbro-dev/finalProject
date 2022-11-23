@@ -19,10 +19,14 @@ export default new Vuex.Store({
     API_URL : API_URL,
     user: null,
     likeMovies: [],
+    err_message: [],
   },
   getters: {
     isLogin(state) {
       return state.token ? true : false
+    },
+    getErrorMessage(state) {
+      return state.err_message
     }
   },
   mutations: {
@@ -47,6 +51,13 @@ export default new Vuex.Store({
     },
     GET_LIKE_MOVIE(state, likeMovies) {
       state.likeMovies = likeMovies
+    },
+    GET_SIGNUP_ERROR(state, err_data) {
+      let error_message = []
+      for (const err_key in err_data) {
+        error_message = [...error_message, ...err_data[err_key]]
+      }
+      state.err_message = error_message
     },
   },
   actions: {
@@ -84,7 +95,8 @@ export default new Vuex.Store({
           context.commit('SAVE_TOKEN', res.data.key)
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err.response.data)
+          context.commit('GET_SIGNUP_ERROR', err.response.data)
         })
     },
     // 로그인

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{ name :'DetailView', params:{id: likeMovie.id}  }">
+    <router-link :to="{ name :'DetailView', params:{id: likeMovie.id}  }" id="userProfileLikeMovie">
       <img :src="likemovie_poster" alt="">
     </router-link>
   </div>
@@ -21,5 +21,8 @@ export default {
 </script>
 
 <style>
-
+  #userProfileLikeMovie img {
+    width: 20rem;
+    height: calc(20rem * 1.414);
+  }
 </style>

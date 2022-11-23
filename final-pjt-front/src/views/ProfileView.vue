@@ -1,16 +1,24 @@
 <template>
   <div>
-    <h1>{{ user }}님의 프로필</h1>
-    <p>좋아하는 영화</p>
-    <div class="d-flex">
-      <ProfileLikeMovie
-      v-for="likeMovie in likeMovies"
-      :key="likeMovie.id"
-      :likeMovie="likeMovie"
-      class="me-3"/>
+    <h1>프로필</h1>
+    <div id='userProfile' class="d-flex flex-column align-items-center" style="width: 100%; height: 600px; margin-top: 5rem;">
+      <div id="userInformations" style="width: 100%;" class="d-flex">
+        <span>
+          <h1>{{ user }}</h1>
+        </span>
+        <button v-if="!is_follow">팔로우</button>
+        <button v-else>팔로우 취소</button>
+      </div>
+      <hr>
+      <p>좋아요 표시한 영화</p>
+      <div class="d-flex">
+        <ProfileLikeMovie
+        v-for="likeMovie in likeMovies"
+        :key="likeMovie.id"
+        :likeMovie="likeMovie"
+        class="me-3"/>
+      </div>
     </div>
-    <!-- <button v-if="!is_follow">팔로우</button>
-    <button v-else>팔로우 취소</button> -->
   </div>
 </template>
 
