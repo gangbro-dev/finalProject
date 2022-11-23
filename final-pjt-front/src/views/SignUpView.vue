@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="d-flex flex-column align-items-center" style="width: 100%; height: 600px; margin-top: 22vh;">
+    <div id="SignUpForm" class="d-flex flex-column align-items-center" style="width: 100%; height: 600px; margin-top: 22vh;">
       <h1 class="mb-5">회원 가입</h1>
-      <form @submit.prevent='signUp' style="width: 330px;">
+      <form @submit.prevent='signUp' style="width: 360px;">
         <div class="d-flex justify-content-between align-items-center my-2" style="width: 100%;">
           <label for="username">ID</label>
           <input type="text" id='username' v-model="username">
@@ -16,8 +16,17 @@
           <input type="password" id='password2' v-model='password2'>
         </div>
         <ul class="footer-button-plus">
-          <input ref="profileImage" type="file" label="이미지 제출" style="width: 400px; margin-left: 100px;"
-              @change="onImageChange"/>
+          <v-file-input 
+          :rules="rules"
+          accept="image/png, image/jpeg, image/bmp"
+          placeholder="Pick an avatar"
+          prepend-icon="mdi-camera"
+          label="이미지 제출" 
+          ref="profileImage" 
+          name="files" 
+          type="file" 
+          style="width: 400px;"
+          @change="onImageChange"/>
         </ul>
         <div class="d-flex justify-content-end align-items-center my-2" style="width: 100%;">
           <input type="submit" value='확인' class="btn btn-dark btn-sm" >
@@ -39,7 +48,7 @@ export default {
       username: null,
       password1: null,
       password2: null,
-      uploadimage: '',
+      profile_image: null,
     }
   },
   computed: {
@@ -52,7 +61,7 @@ export default {
       const username = this.username
       const password1 = this.password1
       const password2 = this.password2
-      const profile_image = this.uploadimageurl
+      const profile_image = this.profile_image
 
       const payload = {
         username: username,
@@ -62,9 +71,9 @@ export default {
       }
       this.$store.dispatch('signUp',payload)
     },
-    onImageChange() {
-      this.uploadimage = this.$refs.profileImage.files
-      console.log(this.uploadimage)
+    onImageChange(file) {
+      console.log(file)
+      this.profile_image = file
     }
   }
 }

@@ -6,5 +6,5 @@ from django_resized import ResizedImageField
 
 class User(AbstractUser):
     followings = models.ManyToManyField("self", symmetrical=False, related_name='followers')
-    profile_image = ResizedImageField(size=[300, 300], upload_to='whatever', null=True, blank=True,)
+    profile_image = ResizedImageField(size=[300, 300], upload_to='images/', null=True, blank=True,)
     

@@ -34,7 +34,7 @@ export default new Vuex.Store({
       state.movies = movies
     },
     SAVE_TOKEN(state, token) {
-      console.log('로그인 성공')
+      // console.log('로그인 성공')
       state.token = token
       router.push({ name: 'MovieView' })
     },
@@ -88,20 +88,48 @@ export default new Vuex.Store({
         data: {
           username: payload.username,
           password1: payload.password1,
-          password2: payload.password2
-        }
+          password2: payload.password2,
+        },
+        // FILES: []
       })
         .then((res) => {
           context.commit('SAVE_TOKEN', res.data.key)
+          console.log('프로필 이미지 저장 직전')
+          console.log(payload.profile_image)
+          context.dispatch('editProfileImage', payload.profile_image)
         })
         .catch((err) => {
           console.log(err.response.data)
           context.commit('GET_SIGNUP_ERROR', err.response.data)
         })
     },
+    // 프로필 이미지 저장
+    editProfileImage(context, Image) {
+      console.log('프로필 이미지 저장 시작')
+      console.log(Image)
+      const profile_image = new FormData();
+      profile_image.append('image', Image)
+      console.log(profile_image)
+      const headers = {
+        'Content-Type': 'multipart/form-data', // Content-Type을 변경해야 파일이 전송됨
+        'Authorization': `Token ${context.state.token}`,
+      }
+      axios({
+        method: "put",
+        url: `${API_URL}/api/v1/accounts/image/`,
+        data: profile_image,
+        headers: headers
+      })
+        .then(() => {
+          console.log('프로필 이미지 전송 성공')
+        })
+        .catch((err) => {
+          console.log(err.response.data)
+        })
+    },
     // 로그인
     login(context, payload) {
-      console.log('로그인 시작')
+      // console.log('로그인 시작')
       axios({
         method: "post",
         url: `${API_URL}/accounts/login/`,
