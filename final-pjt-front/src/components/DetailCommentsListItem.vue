@@ -2,7 +2,7 @@
   <div>
     {{ comment.user.username }} :
     {{ comment.content }}
-    <button @click="deleteComment" class="btn btn-dark btn-sm">X</button>
+    <button @click="deleteComment" class="btn btn-danger btn-sm">X</button>
     <hr>
   </div>
 </template>

@@ -4,6 +4,7 @@
       <input
         type="text"
         v-model='comment'
+        placeholder="댓글을 입력하세요"
       >
       <button type="submit" class="btn btn-dark btn-sm">확인</button>
     </form>
