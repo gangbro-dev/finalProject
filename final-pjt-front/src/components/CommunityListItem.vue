@@ -2,17 +2,18 @@
   <div>
     <router-link :to="{ name: 'CommunityDetailView', params: {id : article.id} }" style="text-decoration: none;">
       <div class="d-flex justify-content-between p-2" >
-        <div class="communutySpan title" style="text-decoration: none;">{{ article.title }}</div> 
+        <div class="d-flex">
+          <div class="mx-3">{{ article.id }}</div>
+          <div class="communutySpan title ms-5" style="text-decoration: none;">{{ article.title }}</div> 
+        </div>
         <div class="communutySpan information d-flex">
-          <div style="width: 80px">
+          <div class="me-5">
             {{ article.user.username }}
           </div> 
-          <div class="ms-2" style="width: 90px;">
+          <div class="ms-3" style="width: 90px;">
             {{article.updated_at | date }}
           </div>
         </div>
-
-
       </div>
     </router-link>
     <hr>
