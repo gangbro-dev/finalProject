@@ -96,13 +96,41 @@ export default new Vuex.Store({
           password2: payload.password2
         }
       })
-        .then((res) => {
-          context.commit('SAVE_TOKEN', res.data.key)
-        })
-        .catch((err) => {
-          console.log(err.response.data)
-          context.commit('GET_SIGNUP_ERROR', err.response.data)
-        })
+      .then((res) => {
+        context.commit('SAVE_TOKEN', res.data.key)
+        console.log('프로필 이미지 저장 직전')
+        console.log(payload.profile_image)
+        context.dispatch('editProfileImage', payload.profile_image)
+        context.commit('GET_SIGNUP_ERROR', [])
+      })
+      .catch((err) => {
+        console.log(err.response.data)
+        context.commit('GET_SIGNUP_ERROR', err.response.data)
+      })
+    },
+    // 프로필 이미지 저장
+    editProfileImage(context, Image) {
+      console.log('프로필 이미지 저장 시작')
+      console.log(Image)
+      const profile_image = new FormData();
+      profile_image.append('image', Image)
+      console.log(profile_image)
+      const headers = {
+        'Content-Type': 'multipart/form-data', // Content-Type을 변경해야 파일이 전송됨
+        'Authorization': `Token ${context.state.token}`,
+      }
+      axios({
+        method: "put",
+        url: `${API_URL}/api/v1/accounts/image/`,
+        data: profile_image,
+        headers: headers
+      })
+      .then(() => {
+        console.log('프로필 이미지 전송 성공')
+      })
+      .catch((err) => {
+        console.log(err.response.data)
+      })
     },
     // 로그인
     login(context, payload) {

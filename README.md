@@ -83,3 +83,8 @@
 - 배포 진행은 공용 노션의 해당 문서를 참고합니다.
   1. 서버(Django) 배포
   2. 클라이언트 (Vue) 배포
+
+
+## 문제 해결법
+1. dump data 에러 : 한글 코덱의 문제이므로 코드를 다음과 같이 사용
+  - python -Xutf8 manage.py dumpdata > data.json
