@@ -80,10 +80,6 @@ export default new Vuex.Store({
   actions: {
     // 영화 정보 가져오기
     getMovies(context) {
-      if (context.state.movies.length >= 2000) {
-        return
-      }
-      else {
         axios({
           method: 'get',  
           url: `${API_URL}/api/v1/movies/`,
@@ -95,7 +91,6 @@ export default new Vuex.Store({
           .catch((err) => {
             console.log(err)
           })
-      }
     },
     // 회원가입
     signUp(context, payload) {

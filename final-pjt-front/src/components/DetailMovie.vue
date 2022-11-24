@@ -113,6 +113,7 @@ export default {
   width: 3rem;
   height: 3rem;
   margin-left: 2rem;
+  cursor: pointer;  
 }
 .poster {
   width: auto;

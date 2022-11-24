@@ -55,8 +55,12 @@ img {
   width : 12rem;
   height: 17rem;
 }
-.listItem {
+.listItem img{
   opacity: 0.2;
-  transition: all ease 0.3s;
+  transform: scale(1.1);
+  z-index: 1;
+  transition: all ease 300ms;
+  border: solid 5px #42b983;
+  border-radius: 10%;
 }
 </style>

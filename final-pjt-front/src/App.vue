@@ -1,5 +1,6 @@
 <template>
   <div id="app container" >
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="upButton" @click="goTop">! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc.<path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zm11.3-395.3l112 112c4.6 4.6 5.9 11.5 3.5 17.4s-8.3 9.9-14.8 9.9H304v96c0 17.7-14.3 32-32 32H240c-17.7 0-32-14.3-32-32V256H144c-6.5 0-12.3-3.9-14.8-9.9s-1.1-12.9 3.5-17.4l112-112c6.2-6.2 16.4-6.2 22.6 0z"/></svg> -->
     <nav class="nav navbar navbar-expand-lg bg-light d-flex justify-content-between">
       <span id='nav-menu'>
         <router-link :to="{ name : 'MovieView'}" >Movie</router-link> |
@@ -38,7 +39,7 @@ export default {
     },
     user() {
       return this.$store.state.user.username
-    }
+    },
   },
   methods: {
     logout() {
@@ -114,5 +115,13 @@ div {
   font-weight: bold;
   color: #2c3e50;
   text-decoration: none;
+}
+.upButton {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  cursor: pointer;
 }
 </style>
