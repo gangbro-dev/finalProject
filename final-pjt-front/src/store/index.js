@@ -51,7 +51,7 @@ export default new Vuex.Store({
       router.push({name : 'MovieView'})
     },
     GET_ARTICLES(state, articles) {
-      state.articles = articles
+      state.articles = articles.slice().reverse()
     },
     GET_USER(state, user) {
       state.user = user
@@ -60,7 +60,7 @@ export default new Vuex.Store({
     GET_LIKE_MOVIE(state, likeMovies) {
       state.likeMovies = likeMovies
     },
-    GET_SIGNUP_ERROR(state, err_data) {
+    GET_AUTH_ERROR(state, err_data) {
       let error_message = []
       for (const err_key in err_data) {
         error_message = [...error_message, ...err_data[err_key]]
@@ -114,11 +114,11 @@ export default new Vuex.Store({
         console.log(payload.profile_image)
         context.dispatch('editProfileImage', payload.profile_image)
         context.dispatch('getUser')
-        context.commit('GET_SIGNUP_ERROR', [])
+        context.commit('GET_AUTH_ERROR', [])
       })
       .catch((err) => {
         console.log(err.response.data)
-        context.commit('GET_SIGNUP_ERROR', err.response.data)
+        context.commit('GET_AUTH_ERROR', err.response.data)
       })
     },
     // 프로필 이미지 저장
@@ -140,6 +140,7 @@ export default new Vuex.Store({
       })
       .then(() => {
         console.log('프로필 이미지 전송 성공')
+        context.dispatch('getImg')
       })
       .catch((err) => {
         console.log(err.response.data)
@@ -169,6 +170,29 @@ export default new Vuex.Store({
     // 로그아웃
     logout(context) {
       context.commit('LOGOUT')
+      context.dispatch('getUser')
+    },
+    //회원 정보 수정
+    profileUpdate(context, payload) {
+      const headers = {
+        'Authorization': `Token ${context.state.token}`,
+      }
+      axios({
+        method: "post",
+        url: `${API_URL}/accounts/password/change/`,
+        data: {
+          new_password1: payload.password1,
+          new_password2: payload.password2
+        },
+        headers: headers,
+      })
+      .then(() => {
+        context.commit('GET_AUTH_ERROR', [])
+      })
+      .catch((err) => {
+        console.log(err.response.data)
+        context.commit('GET_AUTH_ERROR', err.response.data)
+      })
     },
     // 게시판 전제 가져오기
     getArticles(context) {

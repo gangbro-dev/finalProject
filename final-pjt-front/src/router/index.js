@@ -10,6 +10,7 @@ import UpdateView from '@/views/UpdateView.vue'
 import CommunityDetailView from '@/views/CommunityDetailView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import RecommendView from '@/views/RecommendView.vue'
+import ProfileUpdateView from '@/views/ProfileUpdateView'
 
 
 Vue.use(VueRouter)
@@ -49,6 +50,11 @@ const routes = [
     path: '/profile/:user_name',
     name: 'ProfileView',
     component: ProfileView
+  },
+  {
+    path: '/profile/:user_name/update',
+    name: "ProfileUpdateView",
+    component: ProfileUpdateView,
   },
   {
     path: '/community/:article_id/update',

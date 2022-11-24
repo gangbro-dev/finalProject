@@ -47,7 +47,8 @@ def isFollow(request, username):
 def follow(request):
     if request.method == "POST":
         profile_user = User.objects.get(username=request.data['user'])
-        print(profile_user)
+        if request.user == profile_user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         if request.user in profile_user.followings.all():
             profile_user.followings.remove(request.user)
             return Response(status=status.HTTP_204_NO_CONTENT)

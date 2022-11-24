@@ -2,22 +2,25 @@
   <div>
     <h1>프로필</h1>
 
-
-    <div class="box">
-      <img class="profile" :src="`${apiUrl}/media/${profileImg}`" alt="">
-    </div>
-
-    
-    <div class="username">
-      <h1>{{ user }}</h1>
-      <div>
-        <button v-if="!is_follow" @click="follow">팔로우</button>
-        <button v-else @click="follow">팔로우 취소</button>
-        <p class="mt-3"> 팔로우 : {{ followers }} | 팔로잉 : {{ followings }}</p>
+    <div class="d-flex justify-content-center m-5">
+      <div class="box">
+        <img class="profile" :src="`${apiUrl}/media/${profileImg}`" alt="">
+      </div>
+      <div class="username">
+        <h1>{{ user }}</h1>
+        <div v-if="isMyPage">
+          <router-link :to="{name: 'ProfileUpdateView', params: {user_name: user}}">
+            <button class="btn btn-dark">회원정보 수정</button>
+          </router-link>
+        </div>
+        <div v-else>
+          <button v-if="!is_follow" class="btn btn-dark" @click="follow">팔로우</button>
+          <button v-else class="btn btn-dark" @click="follow">팔로우 취소</button>
+          <p class="mt-3"> 팔로우 : {{ followers }} | 팔로잉 : {{ followings }}</p>
+        </div>
       </div>
     </div>
-    <div>
-    </div>
+
   <hr>
     <div class="d-flex flex-column align-items-center" style="width: 100%; height: 600px; margin-top: 5rem;"> 
       <div>
@@ -69,6 +72,9 @@ export default {
     },
     followings() {
       return this.$store.state.followingCount
+    },
+    isMyPage() {
+      return this.user === this.$store.state.user.username
     }
   },
   methods: {
@@ -110,11 +116,9 @@ export default {
 
 <style>
 .box {
-    position: relative;
-    top: 35px;
-    left: 300px;
     width: 150px;
     height: 150px; 
+    margin-right: 4rem;
     border-radius: 70%;
     overflow: hidden;
 }
@@ -124,9 +128,5 @@ export default {
     object-fit: cover;
 }
 
-.username {
-    position: relative;
-    bottom : 120px; 
-    left: 600px;
-}
+
 </style>

@@ -14,6 +14,12 @@ from .serializers import ArticleSerializer, CommentSerializer
 
 # Create your views here.
 
+if len(Article.objects.all()) < 100:
+    for i in range(1, 101):
+        article = Article(title=i, content=i, user=User.objects.get(pk=1))
+        article.save()
+
+
 @api_view(["GET",])
 def articlesList(request):
     articles = Article.objects.all()
