@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # path('follow/'),
+    path('follow/', views.follow),
+    path('follow/<str:username>', views.isFollow),
     path('image/', views.addProfileImage),
 ]

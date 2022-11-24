@@ -11,6 +11,5 @@ def profile_directory_path(instance, filename):
 
 
 class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     followings = models.ManyToManyField("self", symmetrical=False, related_name='followers')
     profile_image = ResizedImageField(size=[300, 300], upload_to=profile_directory_path, default="images/default.png", blank=True,)

@@ -1,6 +1,6 @@
 <template>
   <div v-if='article'>
-    <div class="d-flex justify-content-end ">
+    <div class="d-flex justify-content-end " v-if="isWriter">
       <router-link :to="{ name: 'UpdateView', params: {article: article, article_id: article.id} }"><button class="btn btn-dark ms-2">EDIT</button></router-link>
       <button @click="deleteArticle" class="btn btn-danger ms-2">DELETE</button>
     </div>
@@ -38,6 +38,15 @@ export default {
   },
   components: {
     CommunityDetailCommentsList,
+  },
+  computed: {
+    isWriter() {
+      if (this.$store.state.user.username === this.article.user.username) {
+        return true
+      } else {
+        return false
+      }
+    },
   },
   methods: {
     getArticleDetail() {

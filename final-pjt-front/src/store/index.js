@@ -6,7 +6,8 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.0.2:8000'
+
+const API_URL = process.env.VUE_APP_LOCAL_BACK_SERVER_ADRESSE
 
 export default new Vuex.Store({
   plugins: [
@@ -21,6 +22,10 @@ export default new Vuex.Store({
     likeMovies: [],
     err_message: [],
     imgData: null,
+    // 팔로우 관련 데이터
+    isFollowed: null,
+    followerCount: null,
+    followingCount: null,
   },
   getters: {
     isLogin(state) {
@@ -63,6 +68,12 @@ export default new Vuex.Store({
     },
     GET_IMG(state, imgData) {
       state.imgData = encodeURI(imgData)
+    },
+    // 팔로우 데이터 저장
+    GET_FOLLOW_DATA(state, followData) {
+      state.isFollowed = followData.isFollowed
+      state.followerCount = followData.followerCount
+      state.followingCount = followData.followingCount
     }
   },
   actions: {
@@ -101,6 +112,7 @@ export default new Vuex.Store({
         console.log('프로필 이미지 저장 직전')
         console.log(payload.profile_image)
         context.dispatch('editProfileImage', payload.profile_image)
+        context.dispatch('getUser')
         context.commit('GET_SIGNUP_ERROR', [])
       })
       .catch((err) => {
@@ -205,6 +217,7 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
+    // 프로필 이미지 가져오기
     getImg(context) {
       const headers = {
         'Authorization': `Token ${context.state.token}`,
@@ -217,6 +230,44 @@ export default new Vuex.Store({
         .then((res) => {
           console.log(res.data)
           context.commit("GET_IMG", res.data)
+        })
+    },
+    // 팔로우 여부, 총 팔로우 수 가져오기
+    getFollowCount(context, user) {
+      const headers = {
+        'Authorization': `Token ${context.state.token}`,
+      }
+      axios({
+        method: "GET",
+        url: `${API_URL}/api/v1/accounts/follow/${user}`,
+        headers: headers,
+      })
+        .then((res) => {
+          context.commit('GET_FOLLOW_DATA', res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    // 팔로우하기 
+    follow(context, user) {
+      const headers = {
+        'Authorization': `Token ${context.state.token}`,
+      }
+      axios({
+        method: "POST",
+        url: `${API_URL}/api/v1/accounts/follow/`,
+        headers: headers,
+        data: {
+          user: user
+        }
+      })
+        .then((res) => {
+          console.log(res.data)
+          context.dispatch('getFollowCount', user)
+        })
+        .catch((err) => {
+          console.log(err)
         })
     }
   },

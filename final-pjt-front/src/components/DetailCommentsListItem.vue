@@ -5,7 +5,7 @@
         {{ comment.user.username }} :
         {{ comment.content }}
       </div>
-      <div>
+      <div v-if="isWriter">
         <button @click="changeToForm" class="btn btn-dark btn-sm" >Edit</button>
         <button @click="deleteComment" class="btn btn-danger btn-sm">X</button>
       </div>
@@ -36,6 +36,15 @@ export default {
       is_editing: false,
       input: null
     }
+  },
+  computed: {
+    isWriter() {
+      if (this.$store.state.user.username === this.comment.user.username) {
+        return true
+      } else {
+        return false
+      }
+    },
   },
   methods: {
     deleteComment() {
