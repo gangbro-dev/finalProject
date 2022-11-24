@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       is_editing: false,
-      input: null
+      input: this.comment.content
     }
   },
   computed: {
