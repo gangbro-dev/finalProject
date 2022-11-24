@@ -9,6 +9,7 @@ Vue.use(Vuex)
 
 const API_URL = process.env.VUE_APP_LOCAL_BACK_SERVER_ADRESSE
 
+
 export default new Vuex.Store({
   plugins: [
     createPersistedState()

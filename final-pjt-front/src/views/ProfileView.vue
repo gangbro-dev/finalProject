@@ -88,7 +88,6 @@ export default {
       console.log('팔로우 시도')
       const user= this.user
       this.$store.dispatch('follow', user)
-      this.$store.dispatch('getFollowCount', user)
     }
   },
 

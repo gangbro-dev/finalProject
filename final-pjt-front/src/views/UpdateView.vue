@@ -1,6 +1,28 @@
 <template>
-  <div>
-    <h1>게시글 작성</h1>
+<div>
+    <div class="d-flex flex-column align-items-center" style="width: 100%; height: 600px; margin-top: 15vh;">
+      <div class="d-flex mb-5">
+        <h1>게시글 수정</h1>
+      </div>
+      <form @submit.prevent="updateArticle">
+        <div class="d-flex flex-column">
+          <label for="title">제목</label>
+          <input type="text" id='title' placeholder="제목" style="width:672px; height:45px" v-model.trim='title'><br>
+        </div>
+        <div>
+          <label for="content">내용</label><br>
+          <textarea id="content" cols="80" rows="14" placeholder="내용" v-model.trim='content'></textarea>
+        </div>
+        <div class="d-flex justify-content-end">
+          <input type="submit" id="submit" value="작성" class="btn btn-dark btn-sm">
+          <router-link :to="{ name: 'CommunityDetailView', params: {id : article.id} } "><button class="btn btn-secondary btn-sm ms-2">뒤로</button></router-link>
+        </div>
+      </form>
+
+    </div>
+  </div>
+  <!-- <div>
+    <h1>게시글 수정</h1>
     <form @submit.prevent="updateArticle">
       <label for="title">제목 : </label>
       <input type="text" id='title' v-model.trim='title'><br>
@@ -8,7 +30,7 @@
       <textarea id="content" cols="30" rows="10" v-model.trim='content'></textarea>
       <input type="submit" id="submit">
     </form>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -69,5 +91,22 @@ export default {
 </script>
 
 <style>
+label{
+  font-size: 1.3rem;
+}
+
+input::placeholder {
+  font-size: 1.1rem;
+}
+
+textarea::placeholder {
+  font-size: 1.1rem;
+}
+
+button a {
+  color:azure;
+  text-decoration: none;
+}
+
 
 </style>
