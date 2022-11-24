@@ -15,7 +15,7 @@
     </div>
     <div v-else>
       <form @submit.prevent='updateComment'>
-      <input type="text" v-model='input'>
+      <input type="text" v-model='input' :value="lastContent">
       <button type="submit" class="btn btn-dark btn-sm">확인</button>
       <button @click='canclingEdit' class="btn btn-dark btn-sm">취소</button>
       </form>
@@ -48,6 +48,9 @@ export default {
         return false
       }
     },
+    lastContent() {
+      return this.comment.content
+    }
   },
   methods: {
     deleteComment() {
