@@ -10,7 +10,7 @@
       <span id="nav-account" v-if='!isLogin'>
         <router-link  :to="{ name : 'SignUpView' }">SignUp</router-link> |
         <!-- <router-link  :to="{ name : 'LoginView' }">Login</router-link> -->
-        <div style="display:inline-block;" v-b-toggle.sidebar-right>Log In</div>
+        <div style="display:inline-block;" v-b-toggle.sidebar-right>LogIn</div>
         <b-sidebar id="sidebar-right" title="" right shadow>
           <div class="px-3 py-2">
             <LoginView/>
@@ -18,7 +18,7 @@
         </b-sidebar>
       </span>
       <span id="nav-account" v-else>
-        <router-link :to="{ name : 'ProfileView', params: {user_name : user} }">Profile</router-link> |
+        <router-link :to="{ name : 'ProfileView', params: {user_name : $store.state.user.username} }">Profile</router-link> |
         <a type='button' class='logoutButton' @click='logout' >Logout</a> 
       </span>
     </nav>

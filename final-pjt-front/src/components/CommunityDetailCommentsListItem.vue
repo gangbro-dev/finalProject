@@ -1,7 +1,10 @@
 <template>
   <div v-if="!is_editing" class="d-flex justify-content-between">
     <div>
-      {{ comment.user.username }} :
+      <router-link :to="{name: 'ProfileView', params:{ user_name: comment.user.username }}">
+        {{ comment.user.username }}
+      </router-link>
+       :
       {{ comment.content}}
     </div>
     <div v-if="isWriter">

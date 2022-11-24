@@ -12,16 +12,18 @@
           <label for="password2">비밀번호 확인</label>
           <input type="password" id='password2' v-model='password2'>
         </div>
-        <ul class="footer-button-plus">
+        <hr>
+        <ul class="footer-button-plus d-flex justify-content-between my-2 p-0">
+          <label>프로필 사진</label> 
           <input 
-            @change="getImage"
             ref="profileImage" 
             type="file" 
-            :name="$route.params.user_name"
+            :name="username"
             accept=".jpg, .jpeg, .png" 
             label="이미지 제출" 
-            style="width: 400px;"/>
+            style="width: 200px;"/>
         </ul>
+        <hr>
         <div class="d-flex justify-content-end align-items-center my-2" style="width: 100%;">
           <input type="submit" value='확인' class="btn btn-dark btn-sm" >
           <router-link 

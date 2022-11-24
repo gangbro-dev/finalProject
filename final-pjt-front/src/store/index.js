@@ -43,7 +43,8 @@ export default new Vuex.Store({
     SAVE_TOKEN(state, token) {
       console.log('로그인 성공')
       state.token = token
-      router.push({ name: 'MovieView' })
+      console.log('메인페이지로 이동합니다.')
+      router.push({name : 'MovieView'})
     },
     LOGOUT(state) {
       state.token = null
@@ -219,6 +220,8 @@ export default new Vuex.Store({
         .catch((err) => {
           console.log(err)
         })
+      } else {
+        context.commit('GET_USER', null)
       }
     },
     // 입력한 유저의 좋아요 표시한 영화 가져오기
