@@ -6,7 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const API_URL = 'http://192.168.0.2:8000'
+const API_URL = 'http://192.168.202.105:8000'
 
 export default new Vuex.Store({
   plugins: [
