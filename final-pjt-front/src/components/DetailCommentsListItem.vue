@@ -15,7 +15,7 @@
     </div>
     <div v-else class="moviecomment">
       <form @submit.prevent='updateComment'>
-      <input type="text" v-model='input' :value="lastContent">
+      <input type="text" v-model='input'>
       <button type="submit" class="btn btn-dark btn-sm">확인</button>
       <button @click='canclingEdit' class="btn btn-dark btn-sm">취소</button>
       </form>
