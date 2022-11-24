@@ -22,7 +22,8 @@ export default {
 
 <style>
   #userProfileLikeMovie img {
-    width: 20rem;
-    height: calc(20rem * 1.414);
+    width: 18rem;
+    height: calc(18rem * 1.414);
+    margin-bottom: 1rem;
   }
 </style>

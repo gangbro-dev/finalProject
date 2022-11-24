@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!is_editing" class="d-flex justify-content-between">
+  <div v-if="!is_editing" class="d-flex justify-content-between community">
     <div>
       <router-link :to="{name: 'ProfileView', params:{ user_name: comment.user.username }}">
         {{ comment.user.username }}
@@ -12,7 +12,7 @@
       <button @click="deleteComment" class="btn btn-danger btn-sm">X</button>
     </div>
   </div>
-  <div v-else>
+  <div v-else class="community">
     <form @submit.prevent='updateComment'>
       <input type="text" v-model='input'>
       <button type="submit" class="btn btn-dark btn-sm">확인</button>
@@ -93,5 +93,7 @@ export default {
 </script>
 
 <style>
-
+.community button {
+  margin-left: 1rem; 
+}
 </style>

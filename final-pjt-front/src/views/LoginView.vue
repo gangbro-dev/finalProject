@@ -10,7 +10,12 @@
         <label for="password" class="me-3">PW : </label>
         <input type="password" id="password" v-model='password'><br>
       </div>
-      <input type="submit" value="Login" class="btn btn-dark">
+      <div class="d-flex flex-row-reverse justify-content-between " style="width: 100%;">
+        <input type="submit" value="Login" class="btn btn-dark">
+        <router-link  :to="{ name : 'SignUpView' }">
+          <button class="btn btn-secondary">SignUp</button>
+        </router-link>
+      </div>
     </form>
   </div>
 </template>
