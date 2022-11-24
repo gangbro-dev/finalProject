@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-content-between">
       <h1>Community</h1>
-      <router-link :to="{ name: 'CreateView'}"><button class="btn btn-dark">글쓰기</button></router-link>
+      <router-link v-if="user" :to="{ name: 'CreateView'}"><button class="btn btn-dark">글쓰기</button></router-link>
     </div>
     <CommunityList :pageArticles="pageArticles"/>
     <div class="d-flex justify-content-center">
@@ -46,6 +46,9 @@ export default {
       if ((this.$store.state.articles.length) % PAGE_SIZE) {
         return parseInt((this.$store.state.articles.length) / PAGE_SIZE) + 1
       } else return parseInt((this.$store.state.articles.length) / PAGE_SIZE)
+    },
+    user() {
+      return this.$store.state.user.username
     }
 
   },

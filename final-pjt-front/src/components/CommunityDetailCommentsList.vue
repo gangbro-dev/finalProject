@@ -5,6 +5,7 @@
     :key="index"
     :comment="comment"
     @refresh_comments="getComment"
+    class="m-2"
     />
     <CommunityDetailCommentsForm
     :article="article"

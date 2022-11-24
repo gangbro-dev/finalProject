@@ -19,8 +19,8 @@
     </div>
     <div class="d-flex my-3">
       <b-form-rating v-model="rate" variant="warning" size="md"  show-value readonly></b-form-rating>
-      <img class="like-heart" v-if="!is_like" @click="getLike" src="https://img.icons8.com/material-two-tone/48/FF0000/filled-like.png"/>
-      <img class="like-heart" v-else  @click="getLike" src="https://img.icons8.com/material-sharp/48/FF0000/filled-like.png"/>
+      <img class="like-heart" v-if="!is_like" @click="getLike" src="https://img.icons8.com/material-two-tone/48/FF0000/filled-like.png" v-b-toggle.sidebar-right/>
+      <img class="like-heart" v-else  @click="getLike" src="https://img.icons8.com/material-sharp/48/FF0000/filled-like.png" v-b-toggle.sidebar-right/>
     </div>
     <hr>
     <p class="overview">{{ movie.overview }}</p> 

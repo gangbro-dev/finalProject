@@ -14,8 +14,8 @@
           </router-link>
         </div>
         <div v-else>
-          <button v-if="!is_follow" class="btn btn-dark" @click="follow">팔로우</button>
-          <button v-else class="btn btn-dark" @click="follow">팔로우 취소</button>
+          <button v-if="!is_follow" class="btn btn-dark" @click="follow" v-b-toggle.sidebar-right>팔로우</button>
+          <button v-else class="btn btn-dark" @click="follow" v-b-toggle.sidebar-right>팔로우 취소</button>
           <p class="mt-3"> 팔로우 : {{ followers }} | 팔로잉 : {{ followings }}</p>
         </div>
       </div>
@@ -26,7 +26,7 @@
       <div>
         <p>좋아요 표시한 영화</p>
       </div>
-      <div class="d-flex">
+      <div class="d-flex flex-wrap">
         <ProfileLikeMovie
         v-for="likeMovie in likeMovies"
         :key="likeMovie.id"
@@ -56,7 +56,7 @@ export default {
     },
     likeMovies() {
       console.log('좋아하는 영화 가져옴')
-      return this.$store.state.likeMovies.slice(0,5)
+      return this.$store.state.likeMovies
     },
     apiUrl() {
       return this.$store.state.API_URL
@@ -83,6 +83,8 @@ export default {
       const user= this.user
       console.log(user)
       this.$store.dispatch('getLikeMovie', user)
+      console.log('프로필 이미지 갱신됨')
+      this.$store.dispatch('getImg', user)
       return user
     },
     getFollowed() {

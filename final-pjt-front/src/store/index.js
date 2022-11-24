@@ -19,7 +19,7 @@ export default new Vuex.Store({
     articles: [],
     token: null,
     API_URL : API_URL,
-    user: null,
+    user: {username: null},
     likeMovies: [],
     err_message: [],
     imgData: null,
@@ -136,7 +136,7 @@ export default new Vuex.Store({
       })
       .then(() => {
         console.log('프로필 이미지 전송 성공')
-        context.dispatch('getImg')
+        context.dispatch('getImg', context.user.username)
       })
       .catch((err) => {
         console.log(err.response.data)
@@ -215,13 +215,13 @@ export default new Vuex.Store({
         })
         .then((res) => {
           context.commit('GET_USER', res.data)
-          context.dispatch('getImg')
+          context.dispatch('getImg', res.data.user.username)
         })
         .catch((err) => {
           console.log(err)
         })
       } else {
-        context.commit('GET_USER', null)
+        context.commit('GET_USER', {username: null})
       }
     },
     // 입력한 유저의 좋아요 표시한 영화 가져오기
@@ -241,13 +241,13 @@ export default new Vuex.Store({
         })
     },
     // 프로필 이미지 가져오기
-    getImg(context) {
+    getImg(context, user) {
       const headers = {
         'Authorization': `Token ${context.state.token}`,
       }
       axios({
         method: "get",
-        url: `${API_URL}/api/v1/accounts/image/`,
+        url: `${API_URL}/api/v1/accounts/image/${user}`,
         headers: headers
       })
         .then((res) => {
